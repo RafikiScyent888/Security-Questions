@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security+ V7 Final Quiz (81-100)</title>
+    <style>
+        body {
+            background-color: #89CFF0; /* Baby Blue background */
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #quiz-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            width: 90%;
+            max-width: 650px;
+            text-align: center;
+        }
+        .question-text {
+            color: #00FF00; /* Bright Green questions */
+            font-size: 1.25em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .option {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            background-color: white;
+            color: black; /* Black answers until selected */
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .option:hover:not([disabled]) {
+            background-color: #f0f0f0;
+        }
+        /* Color logic once selected */
+        .correct {
+            color: #0077BE !important; /* Ocean Blue for correct */
+            border-color: #0077BE !important;
+            font-weight: bold;
+        }
+        .incorrect {
+            color: #FF0000 !important; /* Red for incorrect */
+            border-color: #FF0000 !important;
+        }
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: #333;
+            color: white;
+            cursor: pointer;
+        }
+        .btn:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+        #explanation-box {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #eef;
+            border-left: 4px solid #0077BE;
+            text-align: left;
+            font-size: 0.95em;
+        }
+        .progress {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <div class="progress" id="progress">Question 81 of 100</div>
+    <div class="question-text" id="question">Loading...</div>
+    <div id="options"></div>
+    
+    <div class="controls">
+        <button class="btn" onclick="resetQuestion()">Reset</button>
+        <button class="btn" onclick="showExplanation()">Explanation</button>
+    </div>
+
+    <div id="explanation-box"></div>
+
+    <div class="controls">
+        <button class="btn" id="prev-btn" onclick="changeQuestion(-1)">Previous</button>
+        <button class="btn" id="next-btn" onclick="changeQuestion(1)">Next</button>
+    </div>
+</div>
+
+<script>
+const quizQuestions = [
+    {
+        num: 81,
+        q: "A company creates a written document that defines acceptable employee behavior when using corporate systems. What type of governance document is this? [cite: 330-332]",
+        options: ["A. Standard", "B. Procedure", "C. Policy", "D. Guideline"],
+        answer: 2,
+        exp: "1. A policy is a high-level document that outlines an organization's requirements and goals regarding security. 2. It sets the foundation for acceptable use by defining what is and isn't allowed. 3. Policies are generally mandatory and form the top tier of the governance hierarchy."
+    },
+    {
+        num: 82,
+        q: "A security team documents detailed step-by-step instructions for configuring firewalls. What type of governance document is this? [cite: 332-333]",
+        options: ["A. Policy", "B. Guideline", "C. Standard", "D. Procedure"],
+        answer: 3,
+        exp: "1. Procedures provide the 'how-to' for specific tasks through sequential steps. 2. They ensure consistency by providing a repeatable process for technical actions. 3. While policies say what to do, procedures provide the exact map to get it done."
+    },
+    {
+        num: 83,
+        q: "A company requires all passwords to contain at least 14 characters and include special symbols. What type of governance element is this? [cite: 333-334]",
+        options: ["A. Procedure", "B. Standard", "C. Risk register", "D. Guideline"],
+        answer: 1,
+        exp: "1. Standards define specific mandatory requirements or benchmarks for technology and configurations. 2. Password complexity requirements are a classic example of a security standard. 3. Standards ensure that security levels are uniform across all systems in the organization."
+    },
+    {
+        num: 84,
+        q: "A business identifies a risk but decides the cost of mitigation is higher than the potential damage. Which risk strategy is being applied? [cite: 334-335]",
+        options: ["A. Risk transfer", "B. Risk avoidance", "C. Risk acceptance", "D. Risk mitigation"],
+        answer: 2,
+        exp: "1. Risk acceptance is a conscious decision to acknowledge a risk without taking action to reduce it. 2. This is typically done when the cost-benefit analysis shows that fixing the risk is too expensive. 3. It implies that the organization is willing to absorb the impact if the threat occurs."
+    },
+    {
+        num: 85,
+        q: "A company purchases cyber insurance to reduce the financial impact of future security incidents. Which risk management strategy is being used? [cite: 335-336]",
+        options: ["A. Risk acceptance", "B. Risk transfer", "C. Risk avoidance", "D. Risk escalation"],
+        answer: 1,
+        exp: "1. Risk transfer moves the financial burden of a risk to a third party. 2. Insurance is the most common method of transferring risk, as the insurer pays for losses. 3. It doesn't eliminate the risk itself but mitigates the negative economic consequences."
+    },
+    {
+        num: 86,
+        q: "A security manager calculates the potential financial impact of a ransomware attack on business operations. Which process is being performed? [cite: 336-337]",
+        options: ["A. Penetration testing", "B. Business impact analysis (BIA)", "C. Threat hunting", "D. Vulnerability scanning"],
+        answer: 1,
+        exp: "1. A BIA evaluates the potential consequences of disrupting critical business functions. 2. It calculates financial and operational impacts to help prioritize recovery efforts. 3. This process identifies recovery time objectives (RTOs) and recovery point objectives (RPOs)."
+    },
+    {
+        num: 87,
+        q: "An organization maintains a document listing identified risks, likelihood, impact, and mitigation plans. What is this document called? [cite: 338-339]",
+        options: ["A. Security baseline", "B. Configuration guide", "C. Risk register", "D. Audit report"],
+        answer: 2,
+        exp: "1. A risk register is a central repository for all identified risks facing an organization. 2. It tracks the status of risks and the owners responsible for managing them. 3. This document is a living artifact used for ongoing risk monitoring and reporting."
+    },
+    {
+        num: 88,
+        q: "Before hiring a cloud provider, a company reviews security practices, compliance certifications, and service agreements. Which process is occurring? [cite: 339-340]",
+        options: ["A. Threat hunting", "B. Vendor assessment", "C. Digital forensics", "D. Patch validation"],
+        answer: 1,
+        exp: "1. Vendor assessments ensure third parties meet an organization's security standards. 2. This process involves verifying that the provider has proper controls in place. 3. It is critical for managing supply chain risk and protecting shared data."
+    },
+    {
+        num: 89,
+        q: "A penetration testing agreement clearly defines what systems can be tested and what activities are prohibited. What section of the agreement is this? [cite: 340-341]",
+        options: ["A. Recovery objective", "B. Rules of engagement", "C. Separation of duties", "D. Asset inventory"],
+        answer: 1,
+        exp: "1. Rules of Engagement (RoE) define the parameters and constraints of a security test. 2. They protect the organization from unintended downtime during testing. 3. RoEs ensure that both the tester and the client have a clear understanding of the project's scope."
+    },
+    {
+        num: 90,
+        q: "A healthcare provider must comply with regulations protecting patient privacy and medical records. What security area is MOST directly involved? [cite: 341-342]",
+        options: ["A. Asset management", "B. Compliance and privacy", "C. Platform diversity", "D. Sandboxing"],
+        answer: 1,
+        exp: "1. Compliance involves adhering to laws, regulations, and industry standards like HIPAA. 2. Privacy focuses on the legal right of individuals to control their personal information. 3. Healthcare providers are heavily regulated to ensure sensitive patient data remains confidential."
+    },
+    {
+        num: 91,
+        q: "An external auditor independently reviews company controls to confirm regulatory compliance. Which process is occurring? [cite: 342-344]",
+        options: ["A. Threat intelligence", "B. Risk acceptance", "C. External audit", "D. Threat hunting"],
+        answer: 2,
+        exp: "1. An external audit is an objective review performed by a third party outside the organization. 2. It provides an unbiased validation that security controls are functioning as intended. 3. These audits are often required by law or for specific industry certifications."
+    },
+    {
+        num: 92,
+        q: "A company performs a simulated cyberattack to evaluate the effectiveness of its defenses. Which assessment method is being used? [cite: 344-345]",
+        options: ["A. Vulnerability scanning", "B. Penetration testing", "C. Configuration management", "D. Asset tracking"],
+        answer: 1,
+        exp: "1. Penetration testing is an active attempt to exploit vulnerabilities to see if a breach is possible. 2. It goes beyond scanning by simulating the actual methods used by attackers. 3. The results help organizations understand the real-world impact of their security gaps."
+    },
+    {
+        num: 93,
+        q: "A manager signs a document formally confirming that implemented security controls meet compliance requirements. What is this process called? [cite: 345-346]",
+        options: ["A. Tokenization", "B. Attestation", "C. Threat modeling", "D. Change approval"],
+        answer: 1,
+        exp: "1. Attestation is a formal statement by a person in authority that a control is operating correctly. 2. It provides evidence for auditors that management is taking responsibility for compliance. 3. This process is a key part of financial and security reporting frameworks."
+    },
+    {
+        num: 94,
+        q: "Employees receive regular simulated phishing emails followed by training when they click suspicious links. What is the PRIMARY goal? [cite: 346-347]",
+        options: ["A. Improve encryption strength", "B. Increase server uptime", "C. Security awareness training", "D. Reduce backup costs"],
+        answer: 2,
+        exp: "1. Security awareness programs aim to reduce human-related risks by educating staff. 2. Phishing simulations teach employees to recognize and report social engineering attempts. 3. Improving the human firewall is often more effective than technical controls alone."
+    },
+    {
+        num: 95,
+        q: "A security team notices a user logging in from two different countries within ten minutes. What should the organization encourage employees to do? [cite: 347-349]",
+        options: ["A. Ignore the activity", "B. Delete system logs", "C. Report anomalous behavior", "D. Disable MFA"],
+        answer: 2,
+        exp: "1. This scenario describes 'impossible travel,' a strong indicator of account compromise. 2. Reporting anomalous behavior allows the security team to investigate and contain potential breaches quickly. 3. Vigilance by both employees and automated systems is essential for early threat detection."
+    },
+    {
+        num: 96,
+        q: "An organization separates financial transaction approval responsibilities between two employees to reduce fraud risk. Which principle is applied? [cite: 350-351]",
+        options: ["A. Least privilege", "B. Separation of duties", "C. Zero trust", "D. Sandboxing"],
+        answer: 1,
+        exp: "1. Separation of duties ensures that no single person has enough power to complete a critical task alone. 2. This control requires collusion for fraud to occur, making malicious activity much harder. 3. It is a fundamental administrative control for maintaining integrity and accountability."
+    },
+    {
+        num: 97,
+        q: "A company enforces mandatory vacations for employees handling financial systems to help identify fraudulent activities. Which risk management concept is this? [cite: 351-352]",
+        options: ["A. High availability", "B. Job rotation", "C. Operational oversight control", "D. Threat intelligence"],
+        answer: 1,
+        exp: "1. Mandatory vacations are a security control where employees must take time off, allowing others to step in. 2. While away, any ongoing fraudulent schemes may be uncovered when the substitute takes over. 3. This is often categorized alongside job rotation as a personnel security control."
+    },
+    {
+        num: 98,
+        q: "A security administrator conducts regular reviews to ensure employees only retain access necessary for their current roles. What process is being performed? [cite: 352-353]",
+        options: ["A. Data masking", "B. Access review and recertification", "C. Threat hunting", "D. Load balancing"],
+        answer: 1,
+        exp: "1. Access reviews prevent 'privilege creep,' where users accumulate rights they no longer need. 2. Recertification requires managers to periodically confirm that their employees' access is still appropriate. 3. This maintains the principle of least privilege throughout the employee lifecycle."
+    },
+    {
+        num: 99,
+        q: "A company develops disaster recovery plans and performs tabletop exercises to evaluate response during emergencies. What is the PRIMARY purpose? [cite: 353-354]",
+        options: ["A. Increase processor speed", "B. Test preparedness and response effectiveness", "C. Reduce software licensing costs", "D. Improve wireless coverage"],
+        answer: 1,
+        exp: "1. Tabletop exercises are discussion-based sessions that walk through a simulated disaster scenario. 2. They allow key personnel to practice their roles and identify flaws in the recovery plan. 3. This preparedness ensures a faster, more effective response when a real crisis occurs."
+    },
+    {
+        num: 100,
+        q: "An organization monitors regulatory changes and updates internal policies to maintain legal compliance. Which activity is MOST directly being performed? [cite: 355]",
+        options: ["A. Threat hunting", "B. Asset disposal", "C. Governance and compliance monitoring", "D. Sandboxing"],
+        answer: 2,
+        exp: "1. Governance and compliance monitoring is the ongoing process of staying aligned with legal requirements. 2. As laws like GDPR or CCPA evolve, internal policies must be updated to avoid fines and liability. 3. This proactive approach ensures the organization remains legally protected and operationally compliant."
+    }
+];
+
+let currentIndex = 0;
+let selectionMade = false;
+
+function loadQuestion() {
+    selectionMade = false;
+    const currentQ = quizQuestions[currentIndex];
+    document.getElementById("progress").innerText = `Question ${currentQ.num} of 100`;
+    document.getElementById("question").innerText = currentQ.q;
+    
+    const optionsDiv = document.getElementById("options");
+    optionsDiv.innerHTML = "";
+    
+    currentQ.options.forEach((opt, index) => {
+        const btn = document.createElement("button");
+        btn.innerText = opt;
+        btn.className = "option";
+        btn.onclick = () => selectOption(index);
+        optionsDiv.appendChild(btn);
+    });
+
+    document.getElementById("explanation-box").style.display = "none";
+    document.getElementById("explanation-box").innerText = currentQ.exp;
+    
+    document.getElementById("prev-btn").disabled = currentIndex === 0;
+    document.getElementById("next-btn").disabled = currentIndex === quizQuestions.length - 1;
+}
+
+function selectOption(index) {
+    if (selectionMade) return;
+    selectionMade = true;
+    
+    const correctIdx = quizQuestions[currentIndex].answer;
+    const btns = document.querySelectorAll(".option");
+    
+    btns.forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === correctIdx) {
+            btn.classList.add("correct");
+        } else if (i === index) {
+            btn.classList.add("incorrect");
+        }
+    });
+}
+
+function resetQuestion() {
+    loadQuestion();
+}
+
+function showExplanation() {
+    const box = document.getElementById("explanation-box");
+    box.style.display = (box.style.display === "none") ? "block" : "none";
+}
+
+function changeQuestion(step) {
+    currentIndex += step;
+    loadQuestion();
+}
+
+// Start
+loadQuestion();
+</script>
+
+</body>
+</html>

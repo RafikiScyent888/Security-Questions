@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security+ Quiz: Questions 41-80</title>
+    <style>
+        body {
+            background-color: #89CFF0; /* Baby Blue */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #quiz-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 90%;
+            max-width: 700px;
+            min-height: 480px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #question-text {
+            color: #00FF00; /* Bright Green */
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 1px #000; /* Shadow for readability on white */
+        }
+
+        .option {
+            display: block;
+            margin: 10px 0;
+            padding: 12px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            cursor: pointer;
+            color: black;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        /* Color coding logic */
+        .option.correct-selection {
+            color: #0077BE !important; /* Bright Ocean Blue */
+            border-color: #0077BE;
+            background-color: #f0faff;
+            font-weight: bold;
+        }
+
+        .option.incorrect-selection {
+            color: #FF0000 !important; /* Red */
+            border-color: #FF0000;
+            background-color: #fff0f0;
+        }
+
+        .controls {
+            margin-top: auto;
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            background-color: #333;
+            color: white;
+        }
+
+        button:hover { opacity: 0.8; }
+        button:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        #explanation-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-left: 5px solid #0077BE;
+            display: none;
+            color: #333;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .progress {
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            color: #666;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <div class="progress" id="progress">Question 41 of 80</div>
+    <div id="question-text">Loading question...</div>
+    <div id="options-container"></div>
+
+    <div id="explanation-box"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="prevQuestion()">Previous</button>
+        <button id="reset-btn" onclick="resetQuestion()">Reset</button>
+        <button id="reveal-btn" onclick="toggleExplanation()">Explanation</button>
+        <button id="next-btn" onclick="nextQuestion()">Next</button>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        {
+            id: 41,
+            q: "Which attack involves taking advantage of the trust a user's browser has in a website?",
+            options: ["XSRF (CSRF)", "SQLi", "XSS", "Buffer Overflow"],
+            answer: 0,
+            exp: "XSRF (Cross-Site Request Forgery) exploits the trust a site has in a user's browser to execute unwanted actions. You arrive at this answer by focusing on the 'trust a user's browser has in a website' key phrase. It forces an authenticated user to submit a request that the web application perceives as legitimate."
+        },
+        {
+            id: 42,
+            q: "An attacker uses a computer to repeatedly ping a server until it crashes. What type of attack is this?",
+            options: ["DoS", "DDoS", "MITM", "Spoofing"],
+            answer: 0,
+            exp: "A Denial of Service (DoS) attack aims to make a service unavailable by overwhelming it with requests from a single source. In this scenario, a single computer is used to crash a server via pings, matching the DoS definition. This differs from a DDoS, which utilizes multiple distributed systems to achieve the same result."
+        },
+        {
+            id: 43,
+            q: "Which of the following is a 'Supply Chain Attack'?",
+            options: ["Compromising a software vendor", "Guessing a user's password", "Sending a phishing email", "Stealing a laptop"],
+            answer: 0,
+            exp: "A Supply Chain attack targets the third-party vendors and software providers that an organization trusts. By injecting malicious code into a vendor's update, the attacker gains access to all of that vendor's customers simultaneously. This is a high-impact threat because it bypasses traditional perimeter defenses by riding on trusted software."
+        },
+        {
+            id: 44,
+            q: "What is 'Typosquatting'?",
+            options: ["Registering domains with slight misspellings", "Stealing data from a keyboard buffer", "Watching someone type a password", "Breaking a physical keyboard"],
+            answer: 0,
+            exp: "Typosquatting relies on users making small typing errors when manually entering a web address into a browser. Attackers register these misspelled domains to lead users to malicious clones of popular sites for credential harvesting. It is a common social engineering tactic that exploits human error in navigation."
+        },
+        {
+            id: 45,
+            q: "Which threat actor is usually motivated by political or social causes?",
+            options: ["Script Kiddie", "APT", "Hacktivist", "Insider Threat"],
+            answer: 2,
+            exp: "Hacktivists are threat actors motivated by social, political, or religious ideologies rather than financial gain. Their primary goal is usually to draw attention to a specific cause or protest a government or corporation. This distinguishes them from organized crime groups who are typically driven by monetary profit."
+        },
+        {
+            id: 46,
+            q: "Which network device uses ACLs to filter traffic based on IP addresses and ports?",
+            options: ["Switch", "Router", "Firewall", "Hub"],
+            answer: 2,
+            exp: "Firewalls use Access Control Lists (ACLs) to filter incoming and outgoing traffic based on source/destination IP addresses and port numbers. They act as the primary barrier between different network zones to enforce specific security policies. You arrive at this answer because the question specifically mentions filtering via IPs and ports."
+        },
+        {
+            id: 47,
+            q: "A company wants to encrypt all traffic between two offices over the internet. What should they use?",
+            options: ["VLAN", "Site-to-Site VPN", "Remote Access VPN", "Honeypot"],
+            answer: 1,
+            exp: "A Site-to-Site VPN creates a secure, encrypted tunnel between two physical office locations over the public internet. This allows users in different offices to access shared resources as if they were on the same local network. It is the industry-standard solution for connecting branch offices securely."
+        },
+        {
+            id: 48,
+            q: "Which protocol is used to secure web traffic?",
+            options: ["HTTP", "FTP", "HTTPS (TLS)", "SNMP"],
+            answer: 2,
+            exp: "HTTPS uses TLS (Transport Layer Security) to encrypt communication between a web browser and a server. It ensures that data remains confidential while also providing server authentication through digital certificates. This is the fundamental protocol for secure web browsing and e-commerce today."
+        },
+        {
+            id: 49,
+            q: "What is the purpose of a 'DMZ'?",
+            options: ["To store internal databases", "To provide a buffer for public-facing services", "To encrypt internal emails", "To manage user passwords"],
+            answer: 1,
+            exp: "A DMZ (Demilitarized Zone) is a subnetwork that sits between the internal private network and the public internet. It hosts public-facing services like web or mail servers to prevent external users from accessing the internal network directly. This adds a critical layer of defense-in-depth for organizational assets."
+        },
+        {
+            id: 50,
+            q: "Which technology allows multiple isolated networks to exist on a single physical switch?",
+            options: ["VPN", "VLAN", "NAT", "DHCP"],
+            answer: 1,
+            exp: "A Virtual Local Area Network (VLAN) segments a single physical switch into multiple isolated logical networks. It improves security by restricting broadcast domains and controlling traffic flow between different departments. This allows for flexible network management without requiring additional physical hardware."
+        },
+        {
+            id: 51,
+            q: "Which cloud service model provides the consumer with the most control over the OS?",
+            options: ["SaaS", "PaaS", "IaaS", "XaaS"],
+            answer: 2,
+            exp: "Infrastructure as a Service (IaaS) provides virtualized computing resources like servers, storage, and networking over the internet. In this model, the customer has the most control because they are responsible for managing the operating system and applications. You arrive at this answer by identifying the high level of OS-level control granted to the user."
+        },
+        {
+            id: 52,
+            q: "A security admin wants to prevent unauthorized devices from connecting to a switch port. What should they implement?",
+            options: ["Port Security (MAC Filtering)", "Loop Protection", "VLAN Tagging", "Spanning Tree"],
+            answer: 0,
+            exp: "Port Security (specifically MAC Filtering) limits which devices can connect to a physical switch port based on their unique hardware address. It prevents unauthorized hardware from being plugged into the network in empty cubicles or public areas. This is a vital Layer 2 security control for managing physical office access."
+        },
+        {
+            id: 53,
+            q: "Which protocol is used to securely manage network devices?",
+            options: ["Telnet", "SSH", "FTP", "SNMPv1"],
+            answer: 1,
+            exp: "Secure Shell (SSH) provides an encrypted channel for managing network devices and servers remotely. It was designed as a secure replacement for Telnet, which sent login credentials and data in cleartext. You arrive at this answer because it is the global standard for 'securely managing' infrastructure."
+        },
+        {
+            id: 54,
+            q: "What does 'Load Balancing' primarily provide?",
+            options: ["Confidentiality", "Availability", "Integrity", "Non-repudiation"],
+            answer: 1,
+            exp: "Load balancing distributes incoming network traffic across multiple servers to ensure that no single server becomes overwhelmed. This directly supports the goal of Availability by providing redundancy and preventing service downtime during traffic spikes. You arrive at this answer by linking traffic distribution to system uptime."
+        },
+        {
+            id: 55,
+            q: "A company moving to the cloud wants a dedicated, private connection to the provider. What is this called?",
+            options: ["Public Cloud", "Community Cloud", "Direct Connect / ExpressRoute", "Hybrid Cloud"],
+            answer: 2,
+            exp: "Cloud providers offer dedicated, private network connections (like AWS Direct Connect or Azure ExpressRoute) that bypass the public internet entirely. These provide more consistent performance, lower latency, and improved security for enterprise workloads. This is the preferred method for hybrid cloud environments requiring high-speed data transfer."
+        },
+        {
+            id: 56,
+            q: "Which of the following is used to store and manage digital certificates?",
+            options: ["SIEM", "PKI", "IDS", "UTM"],
+            answer: 1,
+            exp: "Public Key Infrastructure (PKI) is the framework of hardware, software, and policies used to manage and distribute digital certificates. It enables the secure exchange of data by providing identity verification via a trusted third party. You arrive at this answer by associating the management of certificates with its governing architecture."
+        },
+        {
+            id: 57,
+            q: "Which standard is used for network-based authentication (Port-based)?",
+            options: ["802.11", "802.1X", "802.3", "802.1Q"],
+            answer: 1,
+            exp: "802.1X is an IEEE standard for port-based network access control (PNAC) on wired and wireless networks. It requires devices to authenticate with a central server (like RADIUS) before they are granted access to the physical network. This ensures that only authorized users and devices can connect to the organization's ports."
+        },
+        {
+            id: 58,
+            q: "Which of the following is an 'Air Gap'?",
+            options: ["A network with no physical/wireless connection", "A high-speed fiber connection", "A type of firewall", "A ventilated server room"],
+            answer: 0,
+            exp: "An Air Gap is a security measure that ensures a network is physically isolated from all other networks, including the internet. It is used for highly sensitive systems where the risk of remote intrusion or data exfiltration must be minimized to zero. You arrive at this answer because the description mentions a network with no physical or wireless connections."
+        },
+        {
+            id: 59,
+            q: "Which technology translates private IP addresses to a public IP address?",
+            options: ["DNS", "NAT", "DHCP", "ARP"],
+            answer: 1,
+            exp: "Network Address Translation (NAT) allows multiple devices on a private network to share a single public IP address for internet access. It hides the internal network structure from the outside world while conserving the limited pool of IPv4 addresses. This translation typically occurs at the perimeter router or firewall level."
+        },
+        {
+            id: 60,
+            q: "What is a 'CASB'?",
+            options: ["A home firewall", "A security tool between cloud users and apps", "A secure cable", "A biometric scanner"],
+            answer: 1,
+            exp: "A Cloud Access Security Broker (CASB) is a tool that enforces security policies between cloud service users and cloud applications. It provides visibility into cloud usage, data protection (DLP), and threat prevention for SaaS platforms. You arrive at this answer because it sits specifically between the 'cloud user' and the 'cloud application.'"
+        },
+        {
+            id: 61,
+            q: "Which of the following is a stateless inspection?",
+            options: ["Monitoring the entire conversation", "Checking each packet individually", "Blocking based on geography", "Inspecting encrypted packets"],
+            answer: 1,
+            exp: "Stateless inspection (or packet filtering) examines each packet individually without considering the context of the entire connection. It is faster than stateful inspection but less secure because it doesn't track the 'state' or flow of sessions. You arrive at this answer because the description specifies checking 'each packet individually.'"
+        },
+        {
+            id: 62,
+            q: "A company uses a single sign-on (SSO) solution. Which protocol might they be using?",
+            options: ["SAML", "WPA3", "TKIP", "SNMP"],
+            answer: 0,
+            exp: "Security Assertion Markup Language (SAML) is an XML-based standard used for exchanging authentication and authorization data. It is the primary protocol used to enable Single Sign-On (SSO) across different web applications and domains. This allows a user to log in once and access multiple services seamlessly."
+        },
+        {
+            id: 63,
+            q: "Which of the following is a symmetric encryption algorithm?",
+            options: ["RSA", "ECC", "AES", "Diffie-Hellman"],
+            answer: 2,
+            exp: "Advanced Encryption Standard (AES) is a symmetric block cipher used worldwide to secure sensitive data. Symmetric encryption uses the same key for both encryption and decryption, making it significantly faster for large amounts of data. You arrive at this answer by identifying it as a common 'symmetric' algorithm compared to asymmetric ones like RSA."
+        },
+        {
+            id: 64,
+            q: "What is the purpose of 'Hashing'?",
+            options: ["To encrypt data for storage", "To provide integrity via a unique fixed value", "To hide data in an image", "To speed up the network"],
+            answer: 1,
+            exp: "Hashing takes an input of any size and produces a unique, fixed-length string of characters (a digest). Because even a tiny change in the input results in a completely different hash, it is used to verify data integrity. You arrive at this answer by focusing on the goal of creating a 'unique fixed-length value' for verification."
+        },
+        {
+            id: 65,
+            q: "Which protocol provides secure file transfers?",
+            options: ["TFTP", "SFTP", "FTP", "Telnet"],
+            answer: 1,
+            exp: "SSH File Transfer Protocol (SFTP) uses the Secure Shell (SSH) protocol to provide a secure, encrypted tunnel for moving files. It is superior to standard FTP, which transmits data and passwords in cleartext. You arrive at this answer by seeking the protocol that provides 'secure file transfers' via encryption."
+        },
+        {
+            id: 66,
+            q: "What is a 'Honeypot'?",
+            options: ["A password vault", "A decoy system to study attackers", "A type of malware", "A high-speed server"],
+            answer: 1,
+            exp: "A Honeypot is a decoy system designed to look like a high-value target to lure in attackers. It allows security teams to study the attacker's methods and divert them from real production systems. You arrive at this answer because it is described as a 'decoy system' for study and distraction purposes."
+        },
+        {
+            id: 67,
+            q: "Which concept involves keeping the same encryption key for only a short period?",
+            options: ["Key Stretching", "Ephemeral Keys", "Key Escrow", "Key Revocation"],
+            answer: 1,
+            exp: "Ephemeral keys are temporary cryptographic keys generated for a single session or transaction and then discarded. By frequently changing keys, an organization ensures that even if one key is compromised, past and future sessions remain secure. This concept is a core component of achieving Perfect Forward Secrecy (PFS)."
+        },
+        {
+            id: 68,
+            q: "Which type of hypervisor runs directly on the hardware?",
+            options: ["Type 1 (Bare Metal)", "Type 2 (Hosted)", "Type 3 (Cloud)", "Container"],
+            answer: 0,
+            exp: "A Type 1 hypervisor (Bare Metal) runs directly on the host's hardware to manage guest operating systems. It is more efficient and secure than Type 2 hypervisors, which must run on top of a host operating system. You arrive at this answer because the scenario specifies running 'directly on the hardware.'"
+        },
+        {
+            id: 69,
+            q: "A mobile device is lost. The admin wants to delete all data on it remotely. What is this called?",
+            options: ["Remote Wipe", "Geofencing", "Sideloading", "Jailbreaking"],
+            answer: 0,
+            exp: "Remote Wipe is a security feature that allows an administrator to erase all data on a mobile device from a distance. It is a critical control for protecting corporate data when a phone or tablet is lost or stolen. You arrive at this answer because the goal is to 'delete all data' on a lost device."
+        },
+        {
+            id: 70,
+            q: "Which technology provides a centralized way to manage and automate network security?",
+            options: ["SDN (Software Defined Networking)", "VLAN", "Hub", "Repeater"],
+            answer: 0,
+            exp: "Software-Defined Networking (SDN) decouples the network control plane from the forwarding plane (data plane). This allows for centralized management and programmable automation of network traffic and security policies. You arrive at this answer because it describes a 'centralized way to manage and automate' network logic."
+        },
+        {
+            id: 71,
+            q: "Which tool is used to aggregate and correlate logs from multiple sources?",
+            options: ["IDS", "SIEM", "DLP", "UPS"],
+            answer: 1,
+            exp: "Security Information and Event Management (SIEM) tools collect and analyze log data from throughout the enterprise. They correlate disparate events to identify potential security threats that might be missed by individual systems. You arrive at this answer because the tool's primary role is to 'aggregate and correlate logs.'"
+        },
+        {
+            id: 72,
+            q: "What is the first step in the Incident Response process?",
+            options: ["Eradication", "Preparation", "Containment", "Recovery"],
+            answer: 1,
+            exp: "Preparation is the foundational stage of the incident response lifecycle where policies, teams, and tools are established. It ensures that the organization is trained and equipped to handle an attack before it actually occurs. You arrive at this answer because it is universally recognized as the 'first step' in the IR process."
+        },
+        {
+            id: 73,
+            q: "During an investigation, the legal team wants to ensure that the evidence has not been tampered with. What is required?",
+            options: ["Data Masking", "Chain of Custody", "Hot Site", "Qualitative Analysis"],
+            answer: 1,
+            exp: "Chain of Custody is a chronological record that tracks the collection, handling, and storage of evidence during an investigation. It ensures that evidence remains untampered and admissible in a court of law. You arrive at this answer because the legal team wants to verify 'evidence has not been tampered with.'"
+        },
+        {
+            id: 74,
+            q: "Which of the following is an 'Indicator of Compromise' (IoC)?",
+            options: ["High network latency", "Unknown IP communication at 3 AM", "A forgotten password", "A Windows update"],
+            answer: 1,
+            exp: "An Indicator of Compromise (IoC) is a piece of forensic data that suggests a system has been breached. Unexpected outbound traffic to an unknown IP at an odd hour is a classic sign of an active threat or exfiltration. You arrive at this answer by identifying which event represents a specific 'sign' of a security incident."
+        },
+        {
+            id: 75,
+            q: "What is the purpose of 'Sandboxing'?",
+            options: ["To play games", "To run suspicious programs in isolation", "To encrypt data at rest", "To increase database speed"],
+            answer: 1,
+            exp: "Sandboxing creates a safe, isolated environment where suspicious files or code can be executed without risking the host system. It is commonly used by malware analysts and security tools to observe malicious behavior in real-time. You arrive at this answer because the goal is to 'run suspicious programs in an isolated environment.'"
+        },
+        {
+            id: 76,
+            q: "Which of the following is 'Volatile Data'?",
+            options: ["Hard drive contents", "RAM", "USB Stick", "DVD-ROM"],
+            answer: 1,
+            exp: "Volatile data is information that is lost when power is removed from a computer system. RAM (Random Access Memory) is the most common example of volatile storage used in digital forensics. You arrive at this answer by identifying which storage medium requires power to maintain its contents."
+        },
+        {
+            id: 77,
+            q: "A company wants to simulate a real-world attack to test their defenses. Which team performs the attack?",
+            options: ["Blue Team", "Red Team", "White Team", "Purple Team"],
+            answer: 1,
+            exp: "The Red Team acts as the adversary in a security exercise, using real-world attack techniques to test an organization's defenses. Their goal is to identify weaknesses by thinking and acting like a malicious threat actor. You arrive at this answer because the Red Team is explicitly the group that 'performs the attack.'"
+        },
+        {
+            id: 78,
+            q: "What does 'DLP' stand for?",
+            options: ["Data Loss Prevention", "Digital Log Processor", "Dynamic Link Protocol", "Data Layer Protection"],
+            answer: 0,
+            exp: "Data Loss Prevention (DLP) consists of tools and policies designed to ensure that sensitive information does not leave the corporate network. It scans data in motion, in use, and at rest to prevent unauthorized exfiltration. You arrive at this answer by recognizing the standard industry acronym for 'Data Loss Prevention.'"
+        },
+        {
+            id: 79,
+            q: "Which command-line tool can be used to view active network connections?",
+            options: ["ipconfig", "netstat", "ping", "tracert"],
+            answer: 1,
+            exp: "The 'netstat' (network statistics) command-line tool displays all active network connections and listening ports on a local machine. It is a vital tool for troubleshooting and identifying unauthorized or suspicious network activity. You arrive at this answer because the objective is to 'view active network connections.'"
+        },
+        {
+            id: 80,
+            q: "What is the main goal of 'Containment' in incident response?",
+            options: ["To fix the vulnerability", "To stop the incident from spreading", "To identify the attacker", "To restore the system"],
+            answer: 1,
+            exp: "Containment is the IR phase focused on limiting the scope and impact of a security incident to prevent further damage. By isolating infected systems, the security team prevents the threat from spreading deeper into the network. You arrive at this answer because the primary goal is to 'stop the incident from spreading.'"
+        }
+    ];
+
+    let currentIdx = 0;
+
+    const questionEl = document.getElementById('question-text');
+    const optionsEl = document.getElementById('options-container');
+    const progressEl = document.getElementById('progress');
+    const explanationEl = document.getElementById('explanation-box');
+    const revealBtn = document.getElementById('reveal-btn');
+
+    function loadQuestion() {
+        explanationEl.style.display = 'none';
+        revealBtn.textContent = 'Explanation';
+        
+        const q = questions[currentIdx];
+        progressEl.textContent = `Question ${q.id} of 80`;
+        questionEl.textContent = q.q;
+        optionsEl.innerHTML = '';
+
+        q.options.forEach((opt, index) => {
+            const div = document.createElement('div');
+            div.className = 'option';
+            div.textContent = `${String.fromCharCode(65 + index)}. ${opt}`;
+            div.onclick = () => selectOption(index, div);
+            optionsEl.appendChild(div);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === questions.length - 1;
+    }
+
+    function selectOption(index, element) {
+        const q = questions[currentIdx];
+        const allOptions = document.querySelectorAll('.option');
+        
+        allOptions.forEach(opt => {
+            opt.classList.remove('correct-selection', 'incorrect-selection');
+        });
+
+        if (index === q.answer) {
+            element.classList.add('correct-selection');
+        } else {
+            element.classList.add('incorrect-selection');
+            allOptions[q.answer].classList.add('correct-selection');
+        }
+    }
+
+    function resetQuestion() {
+        const allOptions = document.querySelectorAll('.option');
+        allOptions.forEach(opt => {
+            opt.classList.remove('correct-selection', 'incorrect-selection');
+        });
+        explanationEl.style.display = 'none';
+        revealBtn.textContent = 'Explanation';
+    }
+
+    function toggleExplanation() {
+        if (explanationEl.style.display === 'block') {
+            explanationEl.style.display = 'none';
+            revealBtn.textContent = 'Explanation';
+        } else {
+            explanationEl.textContent = questions[currentIdx].exp;
+            explanationEl.style.display = 'block';
+            revealBtn.textContent = 'Hide Explanation';
+        }
+    }
+
+    function nextQuestion() {
+        if (currentIdx < questions.length - 1) {
+            currentIdx++;
+            loadQuestion();
+        }
+    }
+
+    function prevQuestion() {
+        if (currentIdx > 0) {
+            currentIdx--;
+            loadQuestion();
+        }
+    }
+
+    loadQuestion();
+</script>
+
+</body>
+</html>

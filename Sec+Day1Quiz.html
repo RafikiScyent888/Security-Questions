@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CompTIA Security+ (SY0-701) - Day 1 Quiz</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0056b3;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        h2 {
+            text-align: center;
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+        .question-block {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .options {
+            list-style-type: none;
+            padding: 0;
+        }
+        .options li {
+            margin-bottom: 8px;
+        }
+        label {
+            cursor: pointer;
+            display: block;
+            padding: 8px 12px;
+            border: 1px solid #dcdcdc;
+            border-radius: 4px;
+            background-color: #fafafa;
+            transition: background 0.2s;
+        }
+        label:hover {
+            background-color: #f0f4f8;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        .btn-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        button {
+            padding: 12px 25px;
+            font-size: 1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: background 0.2s;
+        }
+        .btn-submit {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn-submit:hover {
+            background-color: #218838;
+        }
+        .btn-reset {
+            background-color: #dc3545;
+            color: white;
+        }
+        .btn-reset:hover {
+            background-color: #c82333;
+        }
+        .explanation {
+            display: none;
+            margin-top: 10px;
+            padding: 12px;
+            background-color: #e9ecef;
+            border-left: 5px solid #007bff;
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+        .score-container {
+            display: none;
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .correct-answer {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+        }
+        .wrong-answer {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>CompTIA Security+ (SY0-701)</h1>
+    <h2>Day 1 Comprehensive Practice Quiz</h2>
+    
+    <div id="scoreArea" class="score-container"></div>
+    <form id="quizForm">
+        <div id="quizContainer"></div>
+        
+        <div class="btn-container">
+            <button type="button" class="btn-submit" onclick="checkAnswers()">Submit Answers</button>
+            <button type="button" class="btn-reset" onclick="resetAndRandomize()">Reset & Randomize</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    const allQuestions = [
+        {
+            id: 1,
+            question: "Which aspect of security assurance specifically relies on cryptographic digital signatures unique to each user to prove that a message or document was sent by the claimed sender?",
+            options: [
+                { text: "Confidentiality", isCorrect: false },
+                { text: "Non-repudiation", isCorrect: true },
+                { text: "Availability", isCorrect: false },
+                { text: "Discretionary access model", isCorrect: false }
+            ],
+            explanation: "Non-repudiation ensures that a person cannot deny the validity of their actions or communications. It uses cryptographic digital signatures unique to each user to provide proof of origin and integrity."
+        },
+        {
+            id: 2,
+            question: "An organization is evaluating its current security posture against the National Institute of Standards and Technology (NIST) Cybersecurity Framework (CSF). What type of analysis are they performing?",
+            options: [
+                { text: "Risk assessment", isCorrect: false },
+                { text: "Gap analysis", isCorrect: true },
+                { text: "Vulnerability analysis", isCorrect: false },
+                { text: "BIA (Business Impact Analysis)", isCorrect: false }
+            ],
+            explanation: "A gap analysis checks how well an organization's security setup matches a cybersecurity framework like the NIST CSF (National Institute of Standards and Technology Cybersecurity Framework) to identify missing, incomplete, or poorly configured controls."
+        },
+        {
+            id: 3,
+            question: "Which function of the NIST Cybersecurity Framework (CSF) focuses on developing security policies, evaluating risks, threats, and vulnerabilities, and recommending controls to mitigate them?",
+            options: [
+                { text: "Protect", isCorrect: false },
+                { text: "Detect", isCorrect: false },
+                { text: "Identify", isCorrect: true },
+                { text: "Respond", isCorrect: false }
+            ],
+            explanation: "The 'Identify' function of the NIST CSF (National Institute of Standards and Technology Cybersecurity Framework) involves developing security policies and capabilities, as well as evaluating risks, threats, and vulnerabilities to recommend security controls."
+        },
+        {
+            id: 4,
+            question: "What unique phase distinguishes the modern Identity and Access Management (IAM) framework from the earlier AAA framework?",
+            options: [
+                { text: "Identification", isCorrect: true },
+                { text: "Authentication", isCorrect: false },
+                { text: "Authorization", isCorrect: false },
+                { text: "Accounting", isCorrect: false }
+            ],
+            explanation: "The modern IAM (Identity and Access Management) framework includes standard AAA (Authentication, Authorization, and Accounting) functions PLUS the Identification component, which was omitted in the earlier framework."
+        },
+        {
+            id: 5,
+            question: "A system enforces pre-determined security rules and labels (such as Secret or Top Secret) that cannot be altered by any individual user within the system. Which access control model is being utilized?",
+            options: [
+                { text: "DAC (Discretionary Access Control)", isCorrect: false },
+                { text: "RBAC (Role-Based Access Control)", isCorrect: false },
+                { text: "MAC (Mandatory Access Control)", isCorrect: true },
+                { text: "ABAC (Attribute-Based Access Control)", isCorrect: false }
+            ],
+            explanation: "In a MAC (Mandatory Access Control) model, access rights are predetermined by system-enforced rules and security labels; they cannot be modified by any standard user within the system."
+        },
+        {
+            id: 6,
+            question: "Security guards and user security awareness training programs fall under which control category?",
+            options: [
+                { text: "Technical controls", isCorrect: false },
+                { text: "Managerial controls", isCorrect: false },
+                { text: "Operational controls", isCorrect: true },
+                { text: "Physical controls", isCorrect: false }
+            ],
+            explanation: "Operational controls are security measures implemented primarily by people rather than automated systems. Examples include security guards and training programs."
+        },
+        {
+            id: 7,
+            question: "A network administrator configures an automated firewall rule and sets up permission policies to block an active security attack from succeeding. What functional control type is this?",
+            options: [
+                { text: "Detective control", isCorrect: false },
+                { text: "Preventive control", isCorrect: true },
+                { text: "Corrective control", isCorrect: false },
+                { text: "Deterrent control", isCorrect: false }
+            ],
+            explanation: "Preventive controls (such as firewall rules, encryption, and permission policies) actively attempt to keep an attack from succeeding. Users do not need to have explicit knowledge of the control for it to function."
+        },
+        {
+            id: 8,
+            question: "Which functional control type psychologically discourages an intrusion, reduces the motive of an attacker, and explicitly requires users to have knowledge of the control to work effectively?",
+            options: [
+                { text: "Deterrent control", isCorrect: true },
+                { text: "Directive control", isCorrect: false },
+                { text: "Compensating control", isCorrect: false },
+                { text: "Technical control", isCorrect: false }
+            ],
+            explanation: "Deterrent controls psychologically discourage intrusions (e.g., warning signs, login banners, good lighting) and require users to have knowledge of the control to change their motivation."
+        },
+        {
+            id: 9,
+            question: "Which corporate role is primarily responsible for overall technology strategy and ensuring IT systems align with organizational goals, while also overseeing security policy implementation?",
+            options: [
+                { text: "CSO (Chief Security Officer)", isCorrect: false },
+                { text: "CIO (Chief Information Officer)", isCorrect: true },
+                { text: "ISSO (Information Systems Security Officer)", isCorrect: false },
+                { text: "Security Manager", isCorrect: false }
+            ],
+            explanation: "The CIO (Chief Information Officer) is responsible for the overall technology strategy and aligning IT systems with organization goals, while overseeing the broad implementation of security policies."
+        },
+        {
+            id: 10,
+            question: "What security principle refers to an organization taking the necessary reasonable steps to protect its assets, data, and infrastructure to prevent harm or loss?",
+            options: [
+                { text: "Liability", isCorrect: false },
+                { text: "Due Care", isCorrect: true },
+                { text: "Non-repudiation", isCorrect: false },
+                { text: "Auditing", isCorrect: false }
+            ],
+            explanation: "Due Care refers to the baseline responsibility of an organization to actively take reasonable, protective steps to safeguard its assets and data from potential harm."
+        },
+        {
+            id: 11,
+            question: "A centralized unit within an enterprise continuously monitors network traffic, endpoints, and logs using tools to identify, investigate, contain, and mitigate active security events. What is this unit called?",
+            options: [
+                { text: "DevSecOps", isCorrect: false },
+                { text: "CIRT (Cyber Incident Response Team)", isCorrect: false },
+                { text: "SOC (Security Operations Center)", isCorrect: true },
+                { text: "Change Control Board", isCorrect: false }
+            ],
+            explanation: "The SOC (Security Operations Center) is a centralized organizational and technical unit that continuously monitors and analyzes an organization's security posture to capture alerts and mitigate risks."
+        },
+        {
+            id: 12,
+            question: "Which team is specifically tasked with integrating automated security testing into Continuous Integration/Continuous Development (CI/CD) pipelines so that security is a shared responsibility at every stage of software creation?",
+            options: [
+                { text: "SOC (Security Operations Center)", isCorrect: false },
+                { text: "CIRT (Cyber Incident Response Team)", isCorrect: false },
+                { text: "DevSecOps (Development, Security, and Operations)", isCorrect: true },
+                { text: "M-of-N Recovery Team", isCorrect: false }
+            ],
+            explanation: "DevSecOps (Development, Security, and Operations) integrates security directly into the development process, implementing secure coding practices and automated security testing in the CI/CD pipeline."
+        },
+        {
+            id: 13,
+            question: "How do modern cyber threats differ significantly from traditional threats of the early internet era?",
+            options: [
+                { text: "Modern threats rely purely on signature-based virus detection.", isCorrect: false },
+                { text: "Modern threats have shifted from simple opportunistic vandalism toward structured, well-funded campaigns driven by financial, espionage, and political motives.", isCorrect: true },
+                { text: "Modern threats are exclusively internal and do not attempt remote network infiltration.", isCorrect: false },
+                { text: "Modern threats have lower technical sophistication and capabilities.", isCorrect: false }
+            ],
+            explanation: "Threats have evolved from early opportunistic vandalism and worms into structured, long-term campaigns funded by nation-states or organized crime (such as Advanced Persistent Threats), shifting motivations toward profit, espionage, and warfare."
+        },
+        {
+            id: 14,
+            question: "A threat actor who uses advanced techniques, holds military or political backing, and conducts prolonged, targeted campaigns while remaining undetected in a network for extended periods is classified as what?",
+            options: [
+                { text: "Unskilled attacker", isCorrect: false },
+                { text: "Hacktivist", isCorrect: false },
+                { text: "APT (Advanced Persistent Threat)", isCorrect: true },
+                { text: "Internal unintentional insider", isCorrect: false }
+            ],
+            explanation: "An APT (Advanced Persistent Threat) describes sophisticated, prolonged, and highly targeted cyberattacks often associated with nation-state actors due to the immense resources and long-term entry goals required."
+        },
+        {
+            id: 15,
+            question: "What type of attack vector involves leaving infected removable USB flash drives in public spaces, hoping a target will plug them into a corporate machine and execute malicious code?",
+            options: [
+                { text: "Watering hole attack", isCorrect: false },
+                { text: "Drop attack", isCorrect: true },
+                { text: "Pharming attack", isCorrect: false },
+                { text: "Typosquatting", isCorrect: false }
+            ],
+            explanation: "In a drop attack, an attacker leaves infected removable media (like USB drives) in public or workplace areas hoping an unsuspecting user will find it and plug it into a computer system."
+        },
+        {
+            id: 16,
+            question: "A user purchases a third-party cloud software application to help complete daily tasks without requesting or obtaining the permission and security analysis of the corporate IT department. What does this describe?",
+            options: [
+                { text: "External threat surface", isCorrect: false },
+                { text: "Shadow IT", isCorrect: true },
+                { text: "Baiting attack", isCorrect: false },
+                { text: "Discretionary authorization", isCorrect: false }
+            ],
+            explanation: "Shadow IT refers to computer hardware or software introduced to the workplace by users without the explicit sanction, procurement review, or security analysis of the IT department."
+        },
+        {
+            id: 17,
+            question: "What is the total sum of all points where an unauthorized user can try to enter data into or extract data from an environment?",
+            options: [
+                { text: "Attack vector", isCorrect: false },
+                { text: "Attack surface", isCorrect: true },
+                { text: "Vulnerability scanner", isCorrect: false },
+                { text: "Trusted platform module", isCorrect: false }
+            ],
+            explanation: "The attack surface is the total sum of all exposed points (hardware, software, network components) where an unauthorized attacker could try to exploit a vulnerability or interact with data."
+        },
+        {
+            id: 18,
+            question: "An automated vulnerability scanner requires a small software component to be explicitly installed on every endpoint device to collect internal data. What type of scanner is this?",
+            options: [
+                { text: "Agentless vulnerability scanner", isCorrect: false },
+                { text: "Client-based vulnerability scanner", isCorrect: true },
+                { text: "Passive network sniffer", isCorrect: false },
+                { text: "Discretionary exploit engine", isCorrect: false }
+            ],
+            explanation: "Client-based vulnerability scanners require an agent (a small software component) to be actively installed on each endpoint device to collect and report detailed system status."
+        },
+        {
+            id: 19,
+            question: "A threat actor compromises a local pizza delivery website commonly visited by staff members of a target financial firm to run exploit code on the visitors' systems. What social engineering/reconnaissance strategy is this?",
+            options: [
+                { text: "Business Email Compromise (BEC)", isCorrect: false },
+                { text: "Watering hole attack", isCorrect: true },
+                { text: "Pretexting impersonation", isCorrect: false },
+                { text: "Typospoofing", isCorrect: false }
+            ],
+            explanation: "A watering hole attack targets a specific group of users by identifying and compromising an unsecure third-party website that the targets frequently visit."
+        },
+        {
+            id: 20,
+            question: "An attacker registers the domain 'goggle.com' to catch traffic from users who make typographical mistakes while typing the address of a popular search engine. What is this practice called?",
+            options: [
+                { text: "Typosquatting", isCorrect: true },
+                { text: "Typospoofing", orient: false },
+                { text: "Pharming", isCorrect: false },
+                { text: "Email spoofing", isCorrect: false }
+            ],
+            explanation: "Typosquatting involves specifically registering domain names that are slight misspellings or common typographical variations of popular websites to deceive users who make keyboard errors."
+        }
+    ];
+
+    function renderQuiz(questions) {
+        const container = document.getElementById('quizContainer');
+        container.innerHTML = '';
+        
+        questions.forEach((q, index) => {
+            const qBlock = document.createElement('div');
+            qBlock.className = 'question-block';
+            qBlock.dataset.id = q.id;
+            
+            const qText = document.createElement('div');
+            qText.className = 'question-text';
+            qText.innerText = `${index + 1}. ${q.question}`;
+            qBlock.appendChild(qText);
+            
+            const optionsList = document.createElement('ul');
+            optionsList.className = 'options';
+            
+            q.options.forEach((opt, oIdx) => {
+                const li = document.createElement('li');
+                const label = document.createElement('label');
+                
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = `question_${q.id}`;
+                radio.value = oIdx;
+                
+                label.appendChild(radio);
+                label.appendChild(document.createTextNode(opt.text));
+                li.appendChild(label);
+                optionsList.appendChild(li);
+            });
+            
+            qBlock.appendChild(optionsList);
+            
+            const exp = document.createElement('div');
+            exp.className = 'explanation';
+            exp.id = `exp_${q.id}`;
+            exp.innerText = q.explanation;
+            qBlock.appendChild(exp);
+            
+            container.appendChild(qBlock);
+        });
+    }
+
+    function checkAnswers() {
+        let score = 0;
+        const blocks = document.querySelectorAll('.question-block');
+        
+        blocks.forEach(block => {
+            const qId = parseInt(block.dataset.id);
+            const qData = allQuestions.find(q => q.id === qId);
+            const selectedRadio = block.querySelector(`input[name="question_${qId}"]:checked`);
+            const explanations = block.querySelector('.explanation');
+            
+            explanations.style.display = 'block';
+            
+            const labels = block.querySelectorAll('label');
+            labels.forEach(l => {
+                l.className = ''; 
+            });
+            
+            qData.options.forEach((opt, index) => {
+                if (opt.isCorrect) {
+                    labels[index].classList.add('correct-answer');
+                }
+            });
+            
+            if (selectedRadio) {
+                const selectedIdx = parseInt(selectedRadio.value);
+                if (qData.options[selectedIdx].isCorrect) {
+                    score++;
+                } else {
+                    labels[selectedIdx].classList.add('wrong-answer');
+                }
+            }
+        });
+        
+        const scoreArea = document.getElementById('scoreArea');
+        scoreArea.style.display = 'block';
+        scoreArea.innerText = `Quiz Complete! Your Score: ${score} / ${allQuestions.length} (${Math.round((score/allQuestions.length)*100)}%)`;
+        if (score >= 15) {
+            scoreArea.className = 'score-container correct-answer';
+        } else {
+            scoreArea.className = 'score-container wrong-answer';
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function resetAndRandomize() {
+        document.getElementById('scoreArea').style.display = 'none';
+        
+        let shuffledQuestions = [...allQuestions];
+        shuffleArray(shuffledQuestions);
+        
+        shuffledQuestions.forEach(q => {
+            shuffleArray(q.options);
+        });
+        
+        renderQuiz(shuffledQuestions);
+    }
+
+    // Initial render
+    resetAndRandomize();
+</script>
+
+</body>
+</html>
