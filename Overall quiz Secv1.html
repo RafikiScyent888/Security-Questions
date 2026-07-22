@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security+ Practice Quiz</title>
+    <style>
+        body {
+            background-color: #89CFF0; /* Baby Blue */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #quiz-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 90%;
+            max-width: 700px;
+            min-height: 450px;
+            position: relative;
+        }
+
+        #question-text {
+            color: #00FF00; /* Bright Green */
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px #000; /* Added for readability on white */
+        }
+
+        .option {
+            display: block;
+            margin: 10px 0;
+            padding: 12px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            cursor: pointer;
+            color: black;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        /* Classes applied via JavaScript */
+        .option.correct-selection {
+            color: #0077BE !important; /* Bright Ocean Blue */
+            border-color: #0077BE;
+            font-weight: bold;
+        }
+
+        .option.incorrect-selection {
+            color: #FF0000 !important; /* Red */
+            border-color: #FF0000;
+        }
+
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            background-color: #333;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        #explanation-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-left: 5px solid #0077BE;
+            display: none;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .progress {
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <div class="progress" id="progress">Question 1 of 40</div>
+    <div id="question-text">Question loading...</div>
+    <div id="options-container"></div>
+
+    <div id="explanation-box"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="prevQuestion()">Previous</button>
+        <button id="reset-btn" onclick="resetQuestion()">Reset</button>
+        <button id="reveal-btn" onclick="toggleExplanation()">Explanation</button>
+        <button id="next-btn" onclick="nextQuestion()">Next</button>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        {
+            q: "A security administrator is implementing a system where access is granted based on the user's role within the organization. Which access control model is being used?",
+            options: ["DAC", "MAC", "RBAC", "ABAC"],
+            answer: 2,
+            exp: "RBAC (Role-Based Access Control) assigns permissions to specific job functions rather than individual users. To arrive at this answer, look for the keyword 'role' which defines the access structure. This model simplifies management because users automatically inherit permissions when assigned to a role."
+        },
+        {
+            q: "Which of the following security goals ensures that data has not been modified by unauthorized entities?",
+            options: ["Confidentiality", "Integrity", "Availability", "Non-repudiation"],
+            answer: 1,
+            exp: "Integrity is the core security pillar focused on preventing unauthorized data alteration. You can identify this by the focus on data being 'modified' or changed. Tools like hashing and digital signatures are commonly used to verify that integrity remains intact."
+        },
+        {
+            q: "An organization wants to verify that a message was sent by a specific user and that the content was not altered. What should the user apply to the message?",
+            options: ["Encryption with a public key", "A digital signature", "A salted hash", "Steganography"],
+            answer: 1,
+            exp: "A digital signature provides both integrity and non-repudiation, verifying the sender's identity. To arrive at this answer, notice the requirement for both identity verification and content validation. By signing with a private key, the sender ensures only their public key can decrypt the hash."
+        },
+        {
+            q: "Which concept assumes that no user or device is trusted by default, even if they are inside the network perimeter?",
+            options: ["Defense in Depth", "Zero Trust", "Honeynet", "Air Gap"],
+            answer: 1,
+            exp: "Zero Trust architecture removes the concept of an implicit 'trusted' internal network. You can arrive at this answer by focusing on the 'no trust by default' phrase in the scenario. Every access request must be continuously authenticated and authorized regardless of location."
+        },
+        {
+            q: "A technician is tasked with ensuring that a critical server remains online even if a single power supply fails. Which concept does this represent?",
+            options: ["Scalability", "Redundancy", "Elasticity", "Non-persistence"],
+            answer: 1,
+            exp: "Redundancy involves duplicating critical components to ensure system operation continues during a failure. The phrase 'remains online even if a component fails' is the key indicator for this concept. This ensures high availability by eliminating single points of failure."
+        },
+        {
+            q: "Which of the following is a physical security control?",
+            options: ["Firewall", "ACL", "Faraday cage", "Encryption"],
+            answer: 2,
+            exp: "A Faraday cage is a physical enclosure used to block electromagnetic fields from entering or leaving an area. To arrive at this answer, identify which option represents a tangible, physical barrier rather than software. It is primarily used to prevent electronic eavesdropping or signal interference."
+        },
+        {
+            q: "A company requires employees to use a password and a hardware token to log in. What type of authentication is this?",
+            options: ["Single-factor", "Mutual", "Multi-factor", "Federation"],
+            answer: 2,
+            exp: "Multi-factor authentication (MFA) requires two or more distinct categories of credentials. In this case, a password is 'something you know' and a token is 'something you have.' Combining these two different factors satisfies the multi-factor requirement."
+        },
+        {
+            q: "Which term describes the probability of a threat actor exploiting a vulnerability?",
+            options: ["Asset", "Risk", "Impact", "Mitigation"],
+            answer: 1,
+            exp: "Risk is mathematically defined as the likelihood (probability) of a threat occurring multiplied by the impact. You arrive at this answer by connecting the potential for exploitation with the term 'probability.' Understanding risk helps organizations prioritize which vulnerabilities to patch first."
+        },
+        {
+            q: "Which policy defines how long data should be kept and when it should be destroyed?",
+            options: ["Acceptable Use Policy (AUP)", "Data Retention Policy", "Incident Response Policy", "Separation of Duties"],
+            answer: 1,
+            exp: "A Data Retention Policy sets the timeline for how long data must be stored for legal or business reasons. The keywords 'how long' and 'destroyed' directly point to data lifecycle management. This policy helps reduce liability and storage costs by purging unnecessary data."
+        },
+        {
+            q: "A user cannot deny having sent an email because the email was digitally signed. Which concept is this?",
+            options: ["Integrity", "Availability", "Non-repudiation", "Obfuscation"],
+            answer: 2,
+            exp: "Non-repudiation ensures that a party in a communication cannot deny the authenticity of their signature or message. You arrive at this answer because the scenario explicitly mentions the user 'cannot deny' the action. This is achieved through the use of asymmetric cryptography."
+        },
+        {
+            q: "Which of the following is considered a corrective control?",
+            options: ["CCTV", "Guard", "Restoring from backups", "Security policy"],
+            answer: 2,
+            exp: "Corrective controls are used to restore a system to a normal state after an incident has occurred. Restoring from backups is the classic example of fixing the damage caused by a threat. You arrive at this answer by identifying which action occurs 'after' the incident to remediate it."
+        },
+        {
+            q: "What is the primary purpose of a 'Gap Analysis'?",
+            options: ["To find the root cause of an incident", "To compare current security levels against desired standards", "To encrypt data at rest", "To scan for network vulnerabilities"],
+            answer: 1,
+            exp: "A Gap Analysis identifies the 'gap' between the current security posture and the required compliance or industry standard. You arrive at this answer by focusing on the comparison of 'current' versus 'desired.' This process creates a roadmap for security improvements and budgeting."
+        },
+        {
+            q: "Which role is responsible for the technical environment where data resides?",
+            options: ["Data Owner", "Data Custodian", "Data Controller", "Data Processor"],
+            answer: 1,
+            exp: "The Data Custodian is responsible for the technical implementation of security controls and data maintenance. To arrive at this answer, look for the 'technical environment' keyword, which distinguishes it from the management role of the Owner. They handle backups, encryption settings, and storage access."
+        },
+        {
+            q: "A security admin uses a 'Mantrap' at the entrance of a data center. What is the primary purpose?",
+            options: ["To prevent tailgating", "To detect fire", "To monitor traffic", "To block EMI"],
+            answer: 0,
+            exp: "A mantrap is a physical access control consisting of two interlocking doors to ensure only one person enters at a time. The primary goal is to prevent 'tailgating' or 'piggybacking' into a secure area. You arrive at this answer by recognizing the physical design of the entryway system."
+        },
+        {
+            q: "Which of the following describes 'security through obscurity'?",
+            options: ["Changing the default port of a service", "Using AES-256 encryption", "Implementing MFA", "Hardening a Linux kernel"],
+            answer: 0,
+            exp: "Security through obscurity relies on hiding information or configuration details to prevent discovery by attackers. Changing a default port is a classic example, as it doesn't actually secure the service, just makes it harder to find. You arrive at this answer by identifying a tactic that hides rather than fixes a vulnerability."
+        },
+        {
+            q: "An attacker sends an email to a CEO pretending to be the legal department to steal credentials. What is this called?",
+            options: ["Phishing", "Whaling", "Vishing", "Smishing"],
+            answer: 1,
+            exp: "Whaling is a highly targeted form of phishing aimed at high-profile individuals like CEOs or executives. You arrive at this answer because the target specified is a 'CEO.' This attack typically uses more sophisticated social engineering than standard phishing."
+        },
+        {
+            q: "Which type of malware encrypts a user's files and demands payment?",
+            options: ["Spyware", "Rootkit", "Ransomware", "Logic Bomb"],
+            answer: 2,
+            exp: "Ransomware is malicious software designed to block access to a computer system or files until a sum of money is paid. The keyword 'encrypts' and 'demands payment' is the definitive characteristic of this malware. It primarily targets the availability of data."
+        },
+        {
+            q: "A user notices their computer is slow, and the CPU usage is high even when idle. A technician finds a process running that is mining cryptocurrency. What is this?",
+            options: ["Adware", "Cryptojacking", "Trojan", "Worm"],
+            answer: 1,
+            exp: "Cryptojacking is the unauthorized use of a person's computing power to mine cryptocurrency. To arrive at this answer, connect the symptoms of 'high CPU usage' with the activity of 'mining.' It often occurs through malicious scripts in a browser or infected software."
+        },
+        {
+            q: "An attacker redirects a website's traffic to a fake site by poisoning the DNS cache. What is this?",
+            options: ["Pharming", "Typosquatting", "Spim", "Shoulder Surfing"],
+            answer: 0,
+            exp: "Pharming involves redirecting victims to a malicious website by corrupting DNS resolution or host files. You arrive at this answer by noting the 'poisoning the DNS cache' method mentioned. Unlike phishing, the user may type the correct URL and still be redirected."
+        },
+        {
+            q: "Which attack involves an attacker capturing a session token and using it to impersonate a user?",
+            options: ["SQL Injection", "Session Hijacking", "Cross-site Scripting", "Replay Attack"],
+            answer: 1,
+            exp: "Session Hijacking occurs when an attacker steals a valid session ID to gain unauthorized access to a web server. The 'capturing a session token' phrase is the key indicator for this attack. Once the token is stolen, the attacker can bypass authentication entirely."
+        },
+        {
+            q: "An attacker enters a string like ' OR 1=1 -- into a login field. What attack is being attempted?",
+            options: ["XSS", "SQL Injection", "Buffer Overflow", "LDAP Injection"],
+            answer: 1,
+            exp: "SQL Injection (SQLi) is an attack that inserts malicious SQL code into input fields to manipulate a database. You arrive at this answer by recognizing the SQL syntax 'OR 1=1' used to bypass authentication. This exploit targets vulnerabilities in the application's data layer."
+        },
+        {
+            q: "A vulnerability is discovered in a software package that has no known patch. What is this called?",
+            options: ["Zero-day", "False positive", "Legacy system", "Shadow IT"],
+            answer: 0,
+            exp: "A Zero-day vulnerability is a security flaw that is unknown to the software vendor and has no available patch. The phrase 'no known patch' is the defining characteristic of this threat. These are highly dangerous because there are zero days of protection available."
+        },
+        {
+            q: "Which type of attack uses a list of common words to try and crack a password?",
+            options: ["Brute Force", "Dictionary Attack", "Birthday Attack", "Rainbow Table"],
+            answer: 1,
+            exp: "A Dictionary Attack uses a predefined list of likely words or previously leaked passwords to guess credentials. You arrive at this answer by identifying the 'list of common words' method. It is more efficient than a pure brute force attack but less effective against complex strings."
+        },
+        {
+            q: "A person walks into an office following an employee who just swiped their badge. What is this called?",
+            options: ["Piggybacking", "Tailgating", "Dumpster diving", "Social engineering"],
+            answer: 1,
+            exp: "Tailgating is the act of following an authorized person into a secure area without their knowledge or consent. You arrive at this answer because the individual is 'following' someone through a badge-protected door. It is a common physical security breach."
+        },
+        {
+            q: "What is the primary difference between a worm and a virus?",
+            options: ["A worm requires human action", "A virus is self-replicating", "A worm is self-replicating and spreads over the network", "A virus only affects mobile devices"],
+            answer: 2,
+            exp: "Worms are standalone programs that replicate and spread across networks without needing a host file or human interaction. Viruses, by contrast, require a user to execute an infected file to spread. You arrive at this answer by focusing on the 'network' and 'self-replicating' traits of the worm."
+        },
+        {
+            q: "Which of the following is a physical threat?",
+            options: ["Skimming", "Bluejacking", "Bluesnarfing", "Spoofing"],
+            answer: 0,
+            exp: "Skimming involves physical devices placed over card readers to steal credit card information during a transaction. You arrive at this answer by identifying which threat requires a physical device interaction. The other options are wireless or software-based attacks."
+        },
+        {
+            q: "An attacker uses an authorized user's Bluetooth connection to steal data. What is this?",
+            options: ["Bluejacking", "Bluesnarfing", "Evil Twin", "Rogue Access Point"],
+            answer: 1,
+            exp: "Bluesnarfing is the unauthorized access of information from a wireless device through a Bluetooth connection. You arrive at this answer because the goal is to 'steal data' (snarfing) rather than just send messages (jacking). It exploits vulnerabilities in the Bluetooth protocol."
+        },
+        {
+            q: "A technician finds that a program is crashing because it is trying to write more data to a memory buffer than it can hold. What is this?",
+            options: ["Integer Overflow", "Buffer Overflow", "Resource Exhaustion", "Race Condition"],
+            answer: 1,
+            exp: "A Buffer Overflow occurs when a program writes data beyond the boundaries of its fixed-length block of memory. This leads to system crashes or the execution of malicious code. You arrive at this answer by identifying the 'writing more data than memory can hold' description."
+        },
+        {
+            q: "Which of the following is a passive reconnaissance technique?",
+            options: ["Port scanning with Nmap", "Banner grabbing", "Searching Whois records", "Vulnerability scanning"],
+            answer: 2,
+            exp: "Passive reconnaissance involves gathering information about a target without directly interacting with their systems. Searching Whois records is passive because you are querying a public database, not the target's server. To arrive at this answer, distinguish between direct interaction and indirect data gathering."
+        },
+        {
+            q: "An attacker sets up a fake Wi-Fi hotspot with the same name as a legitimate one. What is this?",
+            options: ["War Driving", "Evil Twin", "Bluejacking", "Dissociative Attack"],
+            answer: 1,
+            exp: "An Evil Twin is a fraudulent Wi-Fi access point that appears to be legitimate by using the same SSID. Users connect to it thinking it is the official network, allowing the attacker to intercept traffic. You arrive at this answer by identifying the 'fake hotspot with the same name' scenario."
+        },
+        {
+            q: "What is the purpose of a 'Logic Bomb'?",
+            options: ["To steal passwords", "To execute malicious code when a specific condition is met", "To provide remote access", "To replicate across the network"],
+            answer: 1,
+            exp: "A Logic Bomb is a string of code intentionally inserted into software that triggers a malicious action when certain conditions are met. You arrive at this answer by focusing on the 'specific condition' (like a date or user action). It is often planted by disgruntled employees as an insider threat."
+        },
+        {
+            q: "A pen tester is given no information about the target network. What type of test is this?",
+            options: ["White Box", "Grey Box", "Black Box", "Known Environment"],
+            answer: 2,
+            exp: "Black Box testing simulates an outside attacker who has no prior knowledge of the internal systems or architecture. You arrive at this answer because the tester is given 'no information.' This forces the tester to perform their own reconnaissance and discovery."
+        },
+        {
+            q: "Which of the following is a non-credentialed vulnerability scan?",
+            options: ["Scanning as an administrator", "Scanning from the perspective of an outsider without login rights", "Reviewing code for logic errors", "Checking file permissions manually"],
+            answer: 1,
+            exp: "Non-credentialed scans attempt to find vulnerabilities without having login access to the target system. This simulates what an unauthenticated hacker would see from the outside. You arrive at this answer by identifying the 'outsider without login rights' perspective."
+        },
+        {
+            q: "An attacker exploits a flaw where two threads are competing for the same resource. What is this?",
+            options: ["Buffer Overflow", "Race Condition", "DLL Injection", "Memory Leak"],
+            answer: 1,
+            exp: "A Race Condition occurs when the output of a process depends on the sequence or timing of uncontrollable events. You arrive at this answer by focusing on the 'two threads competing for the same resource' description. This timing flaw can be exploited to gain unauthorized privileges or bypass security checks."
+        },
+        {
+            q: "Which of the following describes 'Vishing'?",
+            options: ["Phishing over SMS", "Phishing over Voice/Phone", "Phishing over Social Media", "Phishing over Email"],
+            answer: 1,
+            exp: "Vishing (Voice Phishing) is a social engineering attack conducted over the phone or via VoIP. To arrive at this answer, look for the 'Voice' or 'Phone' keywords. Attackers often use caller ID spoofing to appear as a trusted organization like a bank."
+        },
+        {
+            q: "An attacker uses a precomputed table of hashes to crack passwords. What is this table called?",
+            options: ["Hash Map", "Rainbow Table", "Logic Table", "Salt Table"],
+            answer: 1,
+            exp: "A Rainbow Table is a precomputed database of plaintext passwords and their corresponding hash values. You arrive at this answer by identifying the 'precomputed table of hashes' method. Salting passwords makes these tables ineffective because it changes the hash outcome."
+        },
+        {
+            q: "What is 'Shadow IT'?",
+            options: ["IT departments working at night", "Unauthorized hardware or software", "A backup IT site", "Stealthy malware"],
+            answer: 1,
+            exp: "Shadow IT refers to information technology systems and solutions used within an organization without explicit departmental approval. You arrive at this answer by looking for 'unauthorized' use of tech by employees. This creates security risks because these devices are not managed or patched by the security team."
+        },
+        {
+            q: "Which of the following is a 'Man-in-the-Middle' attack?",
+            options: ["SQL Injection", "ARP Poisoning", "Brute Force", "Salted Hashing"],
+            answer: 1,
+            exp: "ARP Poisoning is a method where an attacker sends faked ARP messages to a LAN to link their MAC address with the IP of a legitimate server. This allows the attacker to intercept, modify, or block data meant for that server. You arrive at this answer by recognizing it as a primary way to sit 'in the middle' of traffic."
+        },
+        {
+            q: "What does a 'Rootkit' primarily aim to do?",
+            options: ["Steal credit card info", "Maintain persistent, hidden access", "Display unwanted ads", "Encrypt the hard drive"],
+            answer: 1,
+            exp: "A Rootkit is a collection of software designed to provide privileged (root) access to a computer while hiding its presence. You arrive at this answer because the primary goal is 'hidden' and 'persistent' access. They often subvert the OS kernel to remain invisible to standard antivirus tools."
+        },
+        {
+            q: "A user receives a text message saying their bank account is locked and to click a link. What is this?",
+            options: ["Phishing", "Smishing", "Vishing", "Whaling"],
+            answer: 1,
+            exp: "Smishing is a form of phishing that uses SMS (Short Message Service) or text messaging as the attack vector. You arrive at this answer because the scenario specifies a 'text message.' It targets mobile users who may be less likely to verify links than they are on a computer."
+        }
+    ];
+
+    let currentIdx = 0;
+
+    const questionEl = document.getElementById('question-text');
+    const optionsEl = document.getElementById('options-container');
+    const progressEl = document.getElementById('progress');
+    const explanationEl = document.getElementById('explanation-box');
+    const revealBtn = document.getElementById('reveal-btn');
+
+    function loadQuestion() {
+        // Reset view
+        explanationEl.style.display = 'none';
+        revealBtn.textContent = 'Explanation';
+        
+        const q = questions[currentIdx];
+        progressEl.textContent = `Question ${currentIdx + 1} of ${questions.length}`;
+        questionEl.textContent = q.q;
+        optionsEl.innerHTML = '';
+
+        q.options.forEach((opt, index) => {
+            const div = document.createElement('div');
+            div.className = 'option';
+            div.textContent = `${String.fromCharCode(65 + index)}. ${opt}`;
+            div.onclick = () => selectOption(index, div);
+            optionsEl.appendChild(div);
+        });
+
+        // Manage button states
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === questions.length - 1;
+    }
+
+    function selectOption(index, element) {
+        const q = questions[currentIdx];
+        const allOptions = document.querySelectorAll('.option');
+        
+        // Clear previous selections for this question
+        allOptions.forEach(opt => {
+            opt.classList.remove('correct-selection', 'incorrect-selection');
+        });
+
+        if (index === q.answer) {
+            element.classList.add('correct-selection');
+        } else {
+            element.classList.add('incorrect-selection');
+            // Show the correct one in blue as well
+            allOptions[q.answer].classList.add('correct-selection');
+        }
+    }
+
+    function resetQuestion() {
+        const allOptions = document.querySelectorAll('.option');
+        allOptions.forEach(opt => {
+            opt.classList.remove('correct-selection', 'incorrect-selection');
+        });
+        explanationEl.style.display = 'none';
+        revealBtn.textContent = 'Explanation';
+    }
+
+    function toggleExplanation() {
+        if (explanationEl.style.display === 'block') {
+            explanationEl.style.display = 'none';
+            revealBtn.textContent = 'Explanation';
+        } else {
+            explanationEl.textContent = questions[currentIdx].exp;
+            explanationEl.style.display = 'block';
+            revealBtn.textContent = 'Hide Explanation';
+        }
+    }
+
+    function nextQuestion() {
+        if (currentIdx < questions.length - 1) {
+            currentIdx++;
+            loadQuestion();
+        }
+    }
+
+    function prevQuestion() {
+        if (currentIdx > 0) {
+            currentIdx--;
+            loadQuestion();
+        }
+    }
+
+    // Initialize
+    loadQuestion();
+</script>
+
+</body>
+</html>

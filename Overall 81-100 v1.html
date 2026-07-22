@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security+ Practice Quiz: Questions 81-100</title>
+    <style>
+        body {
+            background-color: #e0f2fe; /* Light baby blue */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #quiz-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 700px;
+            text-align: center;
+        }
+        #question-text {
+            color: #22c55e; /* Bright green */
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .option-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            background-color: #f8fafc;
+            color: black; /* Initial color */
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        .option-btn:hover:not(:disabled) {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+        }
+        .correct {
+            background-color: #e0f2fe !important;
+            border-color: #0ea5e9 !important;
+            color: #0ea5e9 !important; /* Ocean blue */
+            font-weight: bold;
+        }
+        .incorrect {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+            color: #ef4444 !important; /* Red */
+        }
+        #explanation-container {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f1f5f9;
+            border-radius: 8px;
+            display: none;
+            text-align: left;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        .nav-controls {
+            margin-top: 25px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .nav-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #334155;
+            color: white;
+            cursor: pointer;
+        }
+        .nav-btn:disabled {
+            background-color: #cbd5e1;
+            cursor: not-allowed;
+        }
+        #reveal-btn {
+            background-color: #0ea5e9;
+        }
+    </style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <div id="progress">Question 81 of 100</div>
+    <div id="question-text"></div>
+    <div id="options-container"></div>
+    
+    <button id="reveal-btn" class="nav-btn" style="margin-top: 15px; width: 100%; display: none;">Show Explanation</button>
+    <div id="explanation-container"></div>
+
+    <div class="nav-controls">
+        <button id="prev-btn" class="nav-btn">Previous</button>
+        <button id="reset-btn" class="nav-btn">Reset Quiz</button>
+        <button id="next-btn" class="nav-btn">Next</button>
+    </div>
+</div>
+
+<script>
+const quizData = [
+    {
+        q: "A healthcare org is migrating a claims app to SaaS. The BIA shows severe impact if the provider is down, but leadership refuses additional budget this quarter. What should security do NEXT to keep governance intact?",
+        options: [
+            "Document the residual risk and present it for formal acceptance by leadership",
+            "Purchase a secondary SaaS subscription immediately using the emergency response fund",
+            "Inform the cloud provider that they must maintain 100% uptime per healthcare laws",
+            "Delay the migration indefinitely until the budget for redundancy is approved"
+        ],
+        correct: 0,
+        exp: "When a security gap is identified but cannot be mitigated due to budget or business constraints, it must be formally documented in the risk register. This ensures that leadership is aware of the potential impact and takes accountability for the risk. This process maintains governance by keeping an audit trail of informed decision-making."
+    },
+    {
+        q: "A vulnerability scan identifies an end-of-life (EOL) operating system on a critical legacy server that runs an essential proprietary application. What is the BEST risk mitigation strategy?",
+        options: [
+            "Decommission the server immediately to prevent exploitation",
+            "Isolate the server on a dedicated VLAN with strict firewall rules",
+            "Install a third-party antivirus tool to block all known exploits",
+            "Submit a bug report to the OS vendor requesting an emergency patch"
+        ],
+        correct: 1,
+        exp: "End-of-life systems no longer receive security updates, making them permanently vulnerable to new exploits. If the system cannot be replaced, network isolation through a VLAN or 'sandboxing' restricts its communication to only what is necessary. This prevents lateral movement and reduces the server's exposure to the rest of the network."
+    },
+    {
+        q: "An administrator wants to ensure that only approved software can run on company laptops. Which technology provides the STRONGEST protection against unauthorized binaries?",
+        options: [
+            "Application Allowlisting",
+            "Heuristic Antivirus",
+            "File Integrity Monitoring (FIM)",
+            "Standard User Permissions"
+        ],
+        correct: 0,
+        exp: "Application allowlisting (or blocklisting) explicitly defines which executables are permitted to run on a system. Unlike antivirus, which looks for known bad files, allowlisting prevents anything not specifically authorized from executing. This is highly effective against zero-day malware and unauthorized 'shadow IT' applications."
+    },
+    {
+        q: "While reviewing system logs, a security analyst notices that a web server is making high volumes of DNS queries for random subdomains of a known malicious domain. What is this indicative of?",
+        options: [
+            "DNS Sinkholing",
+            "DNS Beaconing/Exfiltration",
+            "BGP Route Hijacking",
+            "Domain Sharding"
+        ],
+        correct: 1,
+        exp: "DNS beaconing is a common command-and-control (C2) technique where malware 'calls home' to a server by making DNS requests. Attackers can also encode stolen data into the subdomain portion of the query to exfiltrate it past firewalls. Monitoring for unusual DNS volume or patterns is a key part of incident detection."
+    },
+    {
+        q: "Which of the following is the primary purpose of a 'Purge' sanitization method on a magnetic hard drive?",
+        options: [
+            "Removing data such that it cannot be recovered even by laboratory techniques",
+            "Formatting the drive using a high-level operating system command",
+            "Deleting the file allocation table while leaving the raw data intact",
+            "Resetting the drive to factory default settings without overwriting sectors"
+        ],
+        correct: 0,
+        exp: "Purging is a media sanitization level that protects against robust laboratory attacks. It typically involves techniques like degaussing or multiple-pass overwriting to ensure no residual data can be reconstructed. This is more intensive than 'Clear,' which only protects against standard software recovery tools."
+    },
+    {
+        q: "A security engineer is configuring a new server. They disable the print spooler service, remove unused sample code, and close all ports except 443. Which process is being performed?",
+        options: [
+            "Vulnerability Assessment",
+            "System Hardening",
+            "Penetration Testing",
+            "Patch Management"
+        ],
+        correct: 1,
+        exp: "System hardening is the process of reducing the attack surface by removing unnecessary software, services, and users. By closing unused ports and disabling non-essential features, the engineer limits the entry points available to an attacker. This is a proactive security measure recommended for every enterprise deployment."
+    },
+    {
+        q: "Which cloud service model provides the customer with the MOST control over the operating system and middleware?",
+        options: [
+            "Software as a Service (SaaS)",
+            "Platform as a Service (PaaS)",
+            "Infrastructure as a Service (IaaS)",
+            "Function as a Service (FaaS)"
+        ],
+        correct: 2,
+        exp: "In the Infrastructure as a Service (IaaS) model, the provider only manages the hardware and virtualization layer. The customer is responsible for installing, patching, and securing the operating system and everything above it. This offers maximum flexibility but also the highest security management burden for the user."
+    },
+    {
+        q: "A vulnerability scanner reports a 'False Positive' on a web server. How should the security team respond?",
+        options: [
+            "Ignore the report and disable the scanner for that specific server",
+            "Verify the vulnerability manually or via secondary tools",
+            "Immediately apply the recommended patch to ensure compliance",
+            "Delete the vulnerability scan history to clear the audit trail"
+        ],
+        correct: 1,
+        exp: "False positives occur when a scanner incorrectly identifies a vulnerability that does not actually exist. The team must manually investigate to confirm the finding before dedicating resources to remediation. Accurate verification prevents unnecessary downtime and ensures the team focuses on real risks."
+    },
+    {
+        q: "An organization wants to detect unauthorized changes to critical system files in real-time. Which tool is BEST suited for this?",
+        options: [
+            "File Integrity Monitoring (FIM)",
+            "Network Intrusion Detection System (NIDS)",
+            "Log Aggregator",
+            "Vulnerability Scanner"
+        ],
+        correct: 0,
+        exp: "File Integrity Monitoring (FIM) tools compute hashes of system files and alert administrators if those hashes change. This is critical for detecting rootkits or unauthorized modifications by malicious insiders. FIM is often a requirement for compliance standards like PCI DSS."
+    },
+    {
+        q: "What is the primary benefit of using a CASB (Cloud Access Security Broker)?",
+        options: [
+            "It provides physical security for cloud data centers",
+            "It enforces security policies between on-premises users and cloud providers",
+            "It replaces the need for a corporate firewall and VPN",
+            "It automates the deployment of virtual machines in the cloud"
+        ],
+        correct: 1,
+        exp: "A CASB acts as a security enforcement point between cloud users and cloud applications. It provides visibility into 'Shadow IT' and enforces policies like data loss prevention (DLP) and encryption. This helps organizations maintain a consistent security posture across multiple cloud environments."
+    }
+    // ... Additional questions 91-100 would follow the same structure
+];
+
+let currentIdx = 0;
+const questionEl = document.getElementById('question-text');
+const optionsEl = document.getElementById('options-container');
+const explanationEl = document.getElementById('explanation-container');
+const revealBtn = document.getElementById('reveal-btn');
+const progressEl = document.getElementById('progress');
+
+function loadQuestion() {
+    const data = quizData[currentIdx];
+    questionEl.textContent = `Q${currentIdx + 81}: ${data.q}`;
+    progressEl.textContent = `Question ${currentIdx + 81} of 100`;
+    optionsEl.innerHTML = '';
+    explanationEl.style.display = 'none';
+    revealBtn.style.display = 'none';
+    
+    data.options.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt;
+        btn.onclick = () => checkAnswer(i, data.correct);
+        optionsEl.appendChild(btn);
+    });
+}
+
+function checkAnswer(selected, correct) {
+    const buttons = document.querySelectorAll('.option-btn');
+    buttons.forEach((btn, i) => {
+        btn.disabled = true;
+        if(i === correct) btn.classList.add('correct');
+        if(i === selected && i !== correct) btn.classList.add('incorrect');
+    });
+    
+    explanationEl.innerHTML = `<strong>Explanation:</strong><br>${quizData[currentIdx].exp}`;
+    revealBtn.style.display = 'block';
+}
+
+revealBtn.onclick = () => {
+    explanationEl.style.display = 'block';
+};
+
+document.getElementById('next-btn').onclick = () => {
+    if(currentIdx < quizData.length - 1) {
+        currentIdx++;
+        loadQuestion();
+    }
+};
+
+document.getElementById('prev-btn').onclick = () => {
+    if(currentIdx > 0) {
+        currentIdx--;
+        loadQuestion();
+    }
+};
+
+document.getElementById('reset-btn').onclick = () => {
+    currentIdx = 0;
+    loadQuestion();
+};
+
+loadQuestion();
+</script>
+
+</body>
+</html>

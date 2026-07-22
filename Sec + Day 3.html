@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Security+ Quiz – Architecture & Infrastructure Concepts</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-alt: #020617;
+      --card: #020617;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.12);
+      --border-subtle: #1e293b;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --text-soft: #6b7280;
+      --correct: #22c55e;
+      --incorrect: #ef4444;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.85);
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-main);
+      background: radial-gradient(circle at top, #1e293b 0, #020617 45%, #000 100%);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+    .app-shell {
+      width: 100%;
+      max-width: 1100px;
+      background: #020617;
+      border-radius: 28px;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      box-shadow: var(--shadow-soft);
+      padding: 24px 24px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    header.app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .title-block { display: flex; flex-direction: column; gap: 4px; }
+    .title-row { display: flex; align-items: center; gap: 10px; }
+    .title-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px; border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      font-size: 11px; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text-soft);
+    }
+    .title-pill-dot {
+      width: 7px; height: 7px; border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
+    }
+    h1 {
+      margin: 0; font-size: 22px; letter-spacing: 0.02em;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .title-highlight {
+      padding: 2px 8px; border-radius: 999px;
+      background: rgba(56, 189, 248, 0.16);
+      border: 1px solid rgba(56, 189, 248, 0.45);
+      font-size: 13px; color: #e0f2fe;
+    }
+    .subtitle { margin: 0; font-size: 13px; color: var(--text-soft); }
+    .meta-block {
+      display: flex; flex-direction: column;
+      align-items: flex-end; gap: 6px; font-size: 12px;
+    }
+    .meta-row { display: flex; align-items: center; gap: 8px; }
+    .meta-chip {
+      padding: 4px 10px; border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      color: var(--text-muted);
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .meta-chip strong { color: #e5e7eb; }
+    .meta-dot {
+      width: 6px; height: 6px; border-radius: 999px;
+      background: #38bdf8;
+    }
+    .download-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.7);
+      background: radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.35), rgba(15, 23, 42, 0.95));
+      color: #e0f2fe;
+      padding: 6px 14px; font-size: 12px;
+      display: inline-flex; align-items: center; gap: 6px;
+      cursor: pointer;
+    }
+    .download-btn-icon {
+      width: 14px; height: 14px; border-radius: 4px;
+      border: 1px solid rgba(226, 232, 240, 0.6);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 10px;
+    }
+    .download-btn-label {
+      font-weight: 500; letter-spacing: 0.03em; text-transform: uppercase;
+    }
+    .download-btn-sub { font-size: 10px; color: #bae6fd; }
+    .quiz-shell {
+      margin-top: 10px; border-radius: 22px;
+      background: #020617;
+      border: 1px solid rgba(30, 64, 175, 0.7);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.9);
+      padding: 18px 18px 20px;
+    }
+    .quiz-header-row {
+      display: flex; justify-content: space-between;
+      align-items: center; gap: 12px; margin-bottom: 14px;
+    }
+    .quiz-progress { display: flex; flex-direction: column; gap: 6px; }
+    .progress-label-row {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 11px; color: var(--text-soft);
+      text-transform: uppercase; letter-spacing: 0.12em;
+    }
+    .progress-pill {
+      padding: 2px 8px; border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 10px; color: var(--text-muted);
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .progress-pill span:first-child { color: #e5e7eb; }
+    .progress-bar-outer {
+      width: 220px; max-width: 100%; height: 7px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(30, 64, 175, 0.9);
+      padding: 1px;
+    }
+    .progress-bar-inner {
+      height: 100%; border-radius: 999px;
+      background: linear-gradient(90deg, #22c55e, #38bdf8, #6366f1);
+      width: 0%;
+      transition: width 0.2s ease-out;
+    }
+    .score-block {
+      display: flex; flex-direction: column;
+      align-items: flex-end; gap: 4px;
+      font-size: 11px; color: var(--text-soft);
+    }
+    .score-main {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 4px 10px; border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+    .score-main strong { color: #e5e7eb; }
+    .score-dot {
+      width: 7px; height: 7px; border-radius: 999px;
+      background: #38bdf8;
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.25);
+    }
+    .score-sub { font-size: 10px; color: var(--text-muted); }
+    .question-card {
+      margin-top: 6px; border-radius: 18px;
+      background: #020617;
+      border: 1px solid rgba(30, 64, 175, 0.7);
+      padding: 14px 14px 12px;
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.9);
+    }
+    .question-header {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; gap: 10px; margin-bottom: 10px;
+    }
+    .question-title-block { display: flex; flex-direction: column; gap: 4px; }
+    .question-label-row {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 11px; color: var(--text-soft);
+      text-transform: uppercase; letter-spacing: 0.12em;
+    }
+    .question-index-pill {
+      padding: 2px 8px; border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 10px; color: var(--text-muted);
+      display: inline-flex; gap: 4px;
+    }
+    .question-index-pill span:first-child { color: #e5e7eb; }
+    .question-text { margin: 0; font-size: 14px; line-height: 1.5; }
+    .question-meta { font-size: 11px; color: var(--text-soft); text-align: right; }
+    .answers-grid {
+      margin-top: 8px;
+      display: grid; grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    @media (min-width: 720px) {
+      .answers-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .answer-option {
+      position: relative;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(30, 64, 175, 0.7);
+      padding: 8px 9px;
+      display: flex; align-items: flex-start; gap: 8px;
+      cursor: pointer; font-size: 13px;
+      color: #e5e7eb;
+    }
+    .answer-option.disabled { cursor: default; opacity: 0.9; }
+    .answer-option.correct {
+      border-color: rgba(34, 197, 94, 0.95);
+      background: rgba(22, 163, 74, 0.18);
+    }
+    .answer-option.incorrect {
+      border-color: rgba(239, 68, 68, 0.95);
+      background: rgba(185, 28, 28, 0.18);
+    }
+    .answer-badge {
+      min-width: 22px; height: 22px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; color: var(--text-muted);
+    }
+    .answer-text { flex: 1; text-align: left; }
+    .feedback-row {
+      margin-top: 8px;
+      display: flex; justify-content: space-between;
+      align-items: center; gap: 8px;
+      font-size: 12px;
+    }
+    .feedback-message { color: var(--text-muted); }
+    .feedback-message.correct { color: var(--correct); }
+    .feedback-message.incorrect { color: var(--incorrect); }
+    .explanation-toggle {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+      padding: 4px 10px;
+      font-size: 11px;
+      display: inline-flex; align-items: center; gap: 6px;
+      cursor: pointer;
+    }
+    .explanation-panel {
+      margin-top: 6px;
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(30, 64, 175, 0.7);
+      padding: 8px 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+      display: none;
+    }
+    .quiz-footer {
+      margin-top: 14px;
+      display: flex; justify-content: space-between;
+      align-items: center; gap: 10px;
+      font-size: 11px; color: var(--text-soft);
+    }
+    .legend-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 3px 8px; border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+    .legend-dot {
+      width: 8px; height: 8px; border-radius: 999px;
+    }
+    .legend-dot.correct { background: var(--correct); }
+    .legend-dot.incorrect { background: var(--incorrect); }
+    .reset-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+      padding: 5px 12px;
+      font-size: 11px;
+      display: inline-flex; align-items: center; gap: 6px;
+      cursor: pointer;
+    }
+    .reset-btn-icon { font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="title-block">
+        <div class="title-row">
+          <div class="title-pill">
+            <span class="title-pill-dot"></span>
+            <span>Interactive Exam Engine</span>
+          </div>
+        </div>
+        <h1>
+          CompTIA Security+ Quiz
+          <span class="title-highlight">Architecture &amp; Infrastructure Concepts</span>
+        </h1>
+        <p class="subtitle">
+          30-question practice set focusing on secure architecture, network design, and infrastructure hardening.
+        </p>
+      </div>
+      <div class="meta-block">
+        <div class="meta-row">
+          <div class="meta-chip">
+            <span class="meta-dot"></span>
+            <strong>Mode:</strong>
+            <span>Study &amp; Instant Feedback</span>
+          </div>
+        </div>
+        <button id="downloadHtmlBtn" class="download-btn" type="button">
+          <span class="download-btn-icon">↓</span>
+          <span class="download-btn-label">Download</span>
+          <span class="download-btn-sub">This quiz as HTML</span>
+        </button>
+      </div>
+    </header>
+    <main class="quiz-shell">
+      <div class="quiz-header-row">
+        <div class="quiz-progress">
+          <div class="progress-label-row">
+            <span>Progress</span>
+            <div class="progress-pill">
+              <span id="answeredCount">0</span>/<span id="totalCount">30</span> answered
+            </div>
+          </div>
+          <div class="progress-bar-outer">
+            <div id="progressBar" class="progress-bar-inner"></div>
+          </div>
+        </div>
+        <div class="score-block">
+          <div class="score-main">
+            <span class="score-dot"></span>
+            <span>Score:</span>
+            <strong><span id="scorePercent">0</span>%</strong>
+          </div>
+          <div class="score-sub">
+            Correct: <span id="correctCount">0</span> •
+            Incorrect: <span id="incorrectCount">0</span>
+          </div>
+        </div>
+      </div>
+      <section id="quizContainer"></section>
+      <footer class="quiz-footer">
+        <div class="quiz-footer-left">
+          <div class="legend-pill">
+            <span class="legend-dot correct"></span>
+            <span>Correct selection</span>
+          </div>
+          <div class="legend-pill">
+            <span class="legend-dot incorrect"></span>
+            <span>Incorrect selection</span>
+          </div>
+        </div>
+        <div class="quiz-footer-right">
+          <button id="resetQuizBtn" class="reset-btn" type="button">
+            <span class="reset-btn-icon">↺</span>
+            <span>Reset quiz</span>
+          </button>
+        </div>
+      </footer>
+    </main>
+  </div>
+  <script>
+    const quizData = [
+      {
+        id: 1,
+        question:
+          "Which architectural approach most effectively limits lateral movement by enforcing granular communication rules between internal workloads?",
+        answers: [
+          { label: "A", text: "Microsegmentation using workload-level policy enforcement boundaries", correct: true },
+          { label: "B", text: "Static VLAN assignments based solely on switch port groupings", correct: false },
+          { label: "C", text: "Perimeter filtering that relies on a single external firewall layer", correct: false },
+          { label: "D", text: "Flat network routing that forwards internal traffic without restrictions", correct: false }
+        ],
+        explanation:
+          "Microsegmentation enforces fine-grained controls between workloads, reducing lateral movement opportunities."
+      },
+      {
+        id: 2,
+        question:
+          "In a three-tier application design, which component should be placed in the most restrictive network zone to minimize exposure?",
+        answers: [
+          { label: "A", text: "Database tier containing sensitive structured application data", correct: true },
+          { label: "B", text: "Presentation tier responsible for handling external client requests", correct: false },
+          { label: "C", text: "Load balancing tier distributing inbound session traffic", correct: false },
+          { label: "D", text: "DNS resolution tier providing general name lookup services", correct: false }
+        ],
+        explanation:
+          "The database tier contains sensitive data and requires the strongest isolation."
+      },
+      {
+        id: 3,
+        question:
+          "Which design pattern describes placing public-facing systems in a controlled zone between internal and external networks?",
+        answers: [
+          { label: "A", text: "DMZ architecture using screened subnets between firewall layers", correct: true },
+          { label: "B", text: "Single-segment architecture with unified internal routing", correct: false },
+          { label: "C", text: "Mesh topology allowing unrestricted peer-to-peer connectivity", correct: false },
+          { label: "D", text: "Legacy perimeter model relying solely on NAT for protection", correct: false }
+        ],
+        explanation:
+          "A DMZ isolates public systems to reduce risk to internal networks."
+      },
+      {
+        id: 4,
+        question:
+          "Which traffic pattern is characterized by communication between internal systems rather than inbound or outbound flows?",
+        answers: [
+          { label: "A", text: "East-west traffic moving laterally between internal workloads", correct: true },
+          { label: "B", text: "North-south traffic moving between clients and external services", correct: false },
+          { label: "C", text: "Transit traffic routed between remote branch locations", correct: false },
+          { label: "D", text: "Overlay traffic encapsulated for tunneling across WAN links", correct: false }
+        ],
+        explanation:
+          "East-west traffic refers to lateral internal communication."
+      },
+      {
+        id: 5,
+        question:
+          "Which control is most appropriate for enforcing policy boundaries between internal network segments?",
+        answers: [
+          { label: "A", text: "Internal firewalls applying granular inter-segment filtering rules", correct: true },
+          { label: "B", text: "Layer 2 switches forwarding frames based on MAC learning", correct: false },
+          { label: "C", text: "Hubs broadcasting all frames to every connected interface", correct: false },
+          { label: "D", text: "Repeaters regenerating signals without traffic inspection", correct: false }
+        ],
+        explanation:
+          "Internal firewalls enforce segmentation and policy boundaries."
+      },
+      {
+        id: 6,
+        question:
+          "Which design choice best supports high availability for critical perimeter security devices?",
+        answers: [
+          { label: "A", text: "Redundant firewall pairs configured for synchronized failover", correct: true },
+          { label: "B", text: "Single high-capacity firewall with enhanced throughput settings", correct: false },
+          { label: "C", text: "Distributed endpoint firewalls replacing network-level filtering", correct: false },
+          { label: "D", text: "Perimeter filtering performed only at upstream ISP routers", correct: false }
+        ],
+        explanation:
+          "Redundant firewall pairs ensure continuity during device failure."
+      },
+      {
+        id: 7,
+        question:
+          "Which architectural principle ensures that a single component failure does not disrupt overall service availability?",
+        answers: [
+          { label: "A", text: "Fault-tolerant design using redundant and resilient components", correct: true },
+          { label: "B", text: "Minimalist design using a single consolidated service instance", correct: false },
+          { label: "C", text: "Prototype design relying on experimental hardware modules", correct: false },
+          { label: "D", text: "Legacy design using monolithic centralized infrastructure", correct: false }
+        ],
+        explanation:
+          "Fault tolerance ensures continued operation despite component failures."
+      },
+      {
+        id: 8,
+        question:
+          "Which architectural model emphasizes continuous verification and localized enforcement rather than implicit internal trust?",
+        answers: [
+          { label: "A", text: "Zero trust architecture with distributed access validation", correct: true },
+          { label: "B", text: "Perimeter-centric architecture relying on external firewalls", correct: false },
+          { label: "C", text: "Implicit trust architecture assuming internal traffic is safe", correct: false },
+          { label: "D", text: "Best-effort architecture using broad shared access policies", correct: false }
+        ],
+        explanation:
+          "Zero trust removes implicit trust and enforces continuous verification."
+      },
+      {
+        id: 9,
+        question:
+          "Which system is used to centralize administrative access into sensitive management networks?",
+        answers: [
+          { label: "A", text: "Jump server providing controlled entry to management segments", correct: true },
+          { label: "B", text: "Caching proxy accelerating outbound web browsing requests", correct: false },
+          { label: "C", text: "Wireless controller managing guest network associations", correct: false },
+          { label: "D", text: "Public web server hosting external customer applications", correct: false }
+        ],
+        explanation:
+          "Jump servers centralize and secure administrative access."
+      },
+      {
+        id: 10,
+        question:
+          "Which design element is most important when building a secure management network for infrastructure devices?",
+        answers: [
+          { label: "A", text: "Out-of-band management network isolated from user traffic paths", correct: true },
+          { label: "B", text: "Shared VLAN carrying both user and administrative traffic", correct: false },
+          { label: "C", text: "Public internet path used for remote administrative sessions", correct: false },
+          { label: "D", text: "Guest wireless network temporarily used for device management", correct: false }
+        ],
+        explanation:
+          "OOB networks isolate management traffic for security and reliability."
+      },
+      {
+        id: 11,
+        question:
+          "Which component accepts client requests and forwards them to internal application servers while masking backend details?",
+        answers: [
+          { label: "A", text: "Reverse proxy providing controlled access to internal services", correct: true },
+          { label: "B", text: "NAT gateway translating outbound private address traffic", correct: false },
+          { label: "C", text: "Layer 2 switch forwarding frames based on learned MAC tables", correct: false },
+          { label: "D", text: "Routing appliance advertising default routes to internal hosts", correct: false }
+        ],
+        explanation:
+          "Reverse proxies protect backend servers and manage client requests."
+      },
+      {
+        id: 12,
+        question:
+          "Which deployment model distributes application components across multiple geographically separated sites for resilience?",
+        answers: [
+          { label: "A", text: "Active-active multi-site architecture with synchronized workloads", correct: true },
+          { label: "B", text: "Single-site architecture with centralized monolithic services", correct: false },
+          { label: "C", text: "Branch-only architecture with isolated local deployments", correct: false },
+          { label: "D", text: "Ad hoc architecture using unmanaged local installations", correct: false }
+        ],
+        explanation:
+          "Active-active multi-site deployments improve resilience and availability."
+      },
+      {
+        id: 13,
+        question:
+          "Which principle is applied when service accounts are restricted to only the permissions required for their specific tasks?",
+        answers: [
+          { label: "A", text: "Least privilege applied to system and service accounts", correct: true },
+          { label: "B", text: "Implicit trust applied to authenticated internal accounts", correct: false },
+          { label: "C", text: "Open access applied to shared administrative credentials", correct: false },
+          { label: "D", text: "Full control applied to all authenticated user identities", correct: false }
+        ],
+        explanation:
+          "Least privilege limits permissions to reduce risk of compromise."
+      },
+      {
+        id: 14,
+        question:
+          "Which concept describes applying fine-grained security controls between individual workloads in a virtualized environment?",
+        answers: [
+          { label: "A", text: "Microsegmentation using workload-specific policy boundaries", correct: true },
+          { label: "B", text: "Static VLAN segmentation based on physical switch ports", correct: false },
+          { label: "C", text: "Perimeter filtering using a single external firewall layer", correct: false },
+          { label: "D", text: "Legacy segmentation relying on broad trust zones internally", correct: false }
+        ],
+        explanation:
+          "Microsegmentation enforces granular controls between workloads."
+      },
+      {
+        id: 15,
+        question:
+          "Which method best supports secure remote administration over untrusted networks?",
+        answers: [
+          { label: "A", text: "VPN tunnels using strong authentication and encrypted sessions", correct: true },
+          { label: "B", text: "Telnet access permitted from any external network location", correct: false },
+          { label: "C", text: "HTTP-based management exposed on public interfaces", correct: false },
+          { label: "D", text: "Open wireless networks used for administrative connectivity", correct: false }
+        ],
+        explanation:
+          "VPNs protect administrative traffic with encryption and authentication."
+      },
+      {
+        id: 16,
+        question:
+          "Which component enforces application-layer security policies by inspecting and filtering HTTP traffic?",
+        answers: [
+          { label: "A", text: "Web application firewall analyzing inbound and outbound requests", correct: true },
+          { label: "B", text: "Layer 2 switch forwarding frames based on MAC addresses", correct: false },
+          { label: "C", text: "Network hub repeating traffic to all connected devices", correct: false },
+          { label: "D", text: "Patch panel providing passive cable termination points", correct: false }
+        ],
+        explanation:
+          "WAFs enforce application-layer protections."
+      },
+      {
+        id: 17,
+        question:
+          "Which principle is demonstrated by using multiple independent security controls to protect the same asset?",
+        answers: [
+          { label: "A", text: "Defense in depth using layered and overlapping safeguards", correct: true },
+          { label: "B", text: "Single-layer protection relying on one primary control", correct: false },
+          { label: "C", text: "Implicit trust assuming internal traffic is inherently safe", correct: false },
+          { label: "D", text: "Best-effort security using loosely defined control placement", correct: false }
+        ],
+        explanation:
+          "Defense in depth ensures redundancy across security layers."
+      },
+      {
+        id: 18,
+        question:
+          "Which solution evaluates device posture before granting network access?",
+        answers: [
+          { label: "A", text: "Network access control validating compliance before connection", correct: true },
+          { label: "B", text: "Log aggregation system storing long-term audit records", correct: false },
+          { label: "C", text: "Identity provider managing cloud authentication workflows", correct: false },
+          { label: "D", text: "Email encryption gateway securing internal message flows", correct: false }
+        ],
+        explanation:
+          "NAC evaluates device posture and compliance."
+      },
+      {
+        id: 19,
+        question:
+          "Which design choice best supports isolation between tenants in a cloud environment?",
+        answers: [
+          { label: "A", text: "Separate virtual networks and security groups per tenant", correct: true },
+          { label: "B", text: "Shared flat network segment for all tenant workloads", correct: false },
+          { label: "C", text: "Unrestricted routing between tenant environments", correct: false },
+          { label: "D", text: "Single administrative account shared across all tenants", correct: false }
+        ],
+        explanation:
+          "Tenant isolation requires separate virtual networks and policies."
+      },
+      {
+        id: 20,
+        question:
+          "Which component distributes client requests across multiple backend servers to improve availability?",
+        answers: [
+          { label: "A", text: "Load balancer directing traffic using defined distribution logic", correct: true },
+          { label: "B", text: "Network tap passively copying traffic for monitoring tools", correct: false },
+          { label: "C", text: "Patch panel connecting cables between racks and switches", correct: false },
+          { label: "D", text: "Console server providing serial access to infrastructure devices", correct: false }
+        ],
+        explanation:
+          "Load balancers distribute traffic to improve performance and uptime."
+      },
+      {
+        id: 21,
+        question:
+          "Which principle is applied when development, testing, and production environments are separated?",
+        answers: [
+          { label: "A", text: "Environment separation reducing risk of unintended production impact", correct: true },
+          { label: "B", text: "Unified environment simplifying deployment and configuration", correct: false },
+          { label: "C", text: "Shared environment maximizing resource utilization only", correct: false },
+          { label: "D", text: "Ad hoc environment supporting rapid experimental changes", correct: false }
+        ],
+        explanation:
+          "Environment separation prevents development activities from affecting production."
+      },
+      {
+        id: 22,
+        question:
+          "Which system is intentionally hardened and exposed to untrusted networks to provide controlled access?",
+        answers: [
+          { label: "A", text: "Bastion host designed to withstand targeted external attacks", correct: true },
+          { label: "B", text: "Unmanaged workstation used for general internet browsing", correct: false },
+          { label: "C", text: "Legacy server running outdated operating system versions", correct: false },
+          { label: "D", text: "Guest kiosk used for temporary visitor access", correct: false }
+        ],
+        explanation:
+          "Bastion hosts are hardened for exposure to untrusted networks."
+      },
+      {
+        id: 23,
+        question:
+          "Which design choice best supports secure logging and monitoring across distributed infrastructure?",
+        answers: [
+          { label: "A", text: "Centralized log aggregation with secure forwarding mechanisms", correct: true },
+          { label: "B", text: "Local log storage only with no centralized collection", correct: false },
+          { label: "C", text: "Manual review of logs stored on individual devices", correct: false },
+          { label: "D", text: "Unencrypted log transmission across public network paths", correct: false }
+        ],
+        explanation:
+          "Centralized logging enables correlation and secure retention."
+      },
+      {
+        id: 24,
+        question:
+          "Which architecture uses small, independently deployable services that communicate through APIs?",
+        answers: [
+          { label: "A", text: "Microservices architecture with loosely coupled components", correct: true },
+          { label: "B", text: "Monolithic architecture using a single large application", correct: false },
+          { label: "C", text: "Mainframe architecture with centralized batch processing", correct: false },
+          { label: "D", text: "Client-server architecture using thick desktop clients", correct: false }
+        ],
+        explanation:
+          "Microservices improve scalability and resilience."
+      },
+      {
+        id: 25,
+        question:
+          "Which principle is applied when unnecessary services and open ports are removed from an internet-facing server?",
+        answers: [
+          { label: "A", text: "Attack surface reduction through service minimization", correct: true },
+          { label: "B", text: "Implicit trust through broad internal service exposure", correct: false },
+          { label: "C", text: "Open access through unrestricted service publication", correct: false },
+          { label: "D", text: "Best-effort security using default service configurations", correct: false }
+        ],
+        explanation:
+          "Reducing exposed services minimizes the number of potential attack vectors."
+      },
+      {
+        id: 26,
+        question:
+          "Which option best describes the role of a CASB in a cloud-centric architecture?",
+        answers: [
+          { label: "A", text: "Broker enforcing security policies between users and cloud services", correct: true },
+          { label: "B", text: "Device providing physical connectivity between racks and switches", correct: false },
+          { label: "C", text: "Appliance used solely for encrypting local storage volumes", correct: false },
+          { label: "D", text: "Server dedicated to running on-premises directory services", correct: false }
+        ],
+        explanation:
+          "CASBs enforce policy and visibility between users and cloud applications."
+      },
+      {
+        id: 27,
+        question:
+          "Which design choice best supports secure integration between on-premises infrastructure and public cloud resources?",
+        answers: [
+          { label: "A", text: "Using dedicated VPN or private connectivity with strong authentication", correct: true },
+          { label: "B", text: "Allowing unrestricted public internet access to internal services", correct: false },
+          { label: "C", text: "Using open wireless networks to bridge cloud and on-premises", correct: false },
+          { label: "D", text: "Relying on unsecured legacy protocols for all connectivity", correct: false }
+        ],
+        explanation:
+          "VPN or private links secure hybrid connectivity."
+      },
+      {
+        id: 28,
+        question:
+          "Which architecture component is primarily responsible for isolating broadcast domains within a switched network?",
+        answers: [
+          { label: "A", text: "Router or Layer 3 switch performing inter-VLAN routing functions", correct: true },
+          { label: "B", text: "Hub broadcasting all inbound frames to every connected interface", correct: false },
+          { label: "C", text: "Patch panel providing passive cable termination for copper links", correct: false },
+          { label: "D", text: "Network tap duplicating traffic streams for monitoring systems", correct: false }
+        ],
+        explanation:
+          "Routers and Layer 3 switches isolate broadcast domains by routing between VLANs."
+      },
+      {
+        id: 29,
+        question:
+          "Which design principle is applied when critical security functions are distributed across separate dedicated components rather than consolidated into a single device?",
+        answers: [
+          { label: "A", text: "Separation of duties across distinct and independently controlled systems", correct: true },
+          { label: "B", text: "Centralized control using one unified multi-purpose appliance", correct: false },
+          { label: "C", text: "Implicit trust model allowing broad administrative privileges", correct: false },
+          { label: "D", text: "Best-effort security relying on default hardware configurations", correct: false }
+        ],
+        explanation:
+          "Separating duties across components reduces risk and avoids a single point of failure."
+      },
+      {
+        id: 30,
+        question:
+          "Which option best describes the purpose of a secure enclave within an enterprise architecture?",
+        answers: [
+          { label: "A", text: "Isolated environment designed to protect highly sensitive workloads", correct: true },
+          { label: "B", text: "Shared environment used for general-purpose user applications", correct: false },
+          { label: "C", text: "Legacy environment used for unsupported operating systems", correct: false },
+          { label: "D", text: "Guest environment used for temporary visitor access only", correct: false }
+        ],
+        explanation:
+          "A secure enclave provides enhanced isolation and controls for highly sensitive data and workloads."
+      }
+    ];
+    function shuffleArray(array) {
+      const arr = array.slice();
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function renderQuiz() {
+      const container = document.getElementById("quizContainer");
+      container.innerHTML = "";
+      quizData.forEach((q, index) => {
+        const shuffledAnswers = shuffleArray(q.answers).map((ans, idx) => ({
+          ...ans,
+          displayLabel: ["A", "B", "C", "D"][idx]
+        }));
+
+        const card = document.createElement("article");
+        card.className = "question-card";
+        card.dataset.questionId = q.id;
+
+        const header = document.createElement("div");
+        header.className = "question-header";
+
+        const titleBlock = document.createElement("div");
+        titleBlock.className = "question-title-block";
+
+        const labelRow = document.createElement("div");
+        labelRow.className = "question-label-row";
+        labelRow.innerHTML = `
+          <span>Question</span>
+          <div class="question-index-pill">
+            <span>${index + 1}</span> of <span>${quizData.length}</span>
+          </div>
+        `;
+
+        const qText = document.createElement("p");
+        qText.className = "question-text";
+        qText.textContent = q.question;
+
+        titleBlock.appendChild(labelRow);
+        titleBlock.appendChild(qText);
+
+        const meta = document.createElement("div");
+        meta.className = "question-meta";
+        meta.textContent = "Architecture & Infrastructure Concepts";
+
+        header.appendChild(titleBlock);
+        header.appendChild(meta);
+
+        const answersGrid = document.createElement("div");
+        answersGrid.className = "answers-grid";
+
+        shuffledAnswers.forEach((ans) => {
+          const option = document.createElement("button");
+          option.type = "button";
+          option.className = "answer-option";
+          option.dataset.correct = ans.correct ? "true" : "false";
+          option.dataset.originalLabel = ans.label;
+          option.innerHTML = `
+            <div class="answer-badge">${ans.displayLabel}</div>
+            <div class="answer-text">${ans.text}</div>
+          `;
+          option.addEventListener("click", () => handleAnswerClick(card, option));
+          answersGrid.appendChild(option);
+        });
+
+        const feedbackRow = document.createElement("div");
+        feedbackRow.className = "feedback-row";
+
+        const feedbackMessage = document.createElement("div");
+        feedbackMessage.className = "feedback-message";
+        feedbackMessage.textContent = "";
+
+        const explanationToggle = document.createElement("button");
+        explanationToggle.type = "button";
+        explanationToggle.className = "explanation-toggle";
+        explanationToggle.innerHTML = `
+          <span>Explanation</span>
+          <span>▼</span>
+        `;
+
+        const explanationPanel = document.createElement("div");
+        explanationPanel.className = "explanation-panel";
+        explanationPanel.innerHTML = `<strong>Why this is correct:</strong> ${q.explanation}`;
+
+        explanationToggle.addEventListener("click", () => {
+          const isVisible = explanationPanel.style.display === "block";
+          explanationPanel.style.display = isVisible ? "none" : "block";
+          explanationToggle.lastElementChild.textContent = isVisible ? "▼" : "▲";
+        });
+
+        feedbackRow.appendChild(feedbackMessage);
+        feedbackRow.appendChild(explanationToggle);
+
+        card.appendChild(header);
+        card.appendChild(answersGrid);
+        card.appendChild(feedbackRow);
+        card.appendChild(explanationPanel);
+
+        container.appendChild(card);
+      });
+
+      updateTotals();
+    }
+
+    function handleAnswerClick(card, selectedOption) {
+      if (card.dataset.answered === "true") return;
+
+      const isCorrect = selectedOption.dataset.correct === "true";
+      const options = card.querySelectorAll(".answer-option");
+      const feedbackMessage = card.querySelector(".feedback-message");
+
+      options.forEach((opt) => {
+        opt.classList.add("disabled");
+        if (opt.dataset.correct === "true") {
+          opt.classList.add("correct");
+        }
+      });
+
+      if (!isCorrect) {
+        selectedOption.classList.add("incorrect");
+      }
+
+      if (isCorrect) {
+        feedbackMessage.textContent = "Correct — this aligns with secure architecture best practices.";
+        feedbackMessage.classList.add("correct");
+      } else {
+        feedbackMessage.textContent = "Not quite — review the explanation to see why another option fits better.";
+        feedbackMessage.classList.add("incorrect");
+      }
+
+      card.dataset.answered = "true";
+      card.dataset.correctAnswered = isCorrect ? "true" : "false";
+
+      updateTotals();
+    }
+
+    function updateTotals() {
+      const cards = Array.from(document.querySelectorAll(".question-card"));
+      const answeredCards = cards.filter((c) => c.dataset.answered === "true");
+      const correctCards = answeredCards.filter((c) => c.dataset.correctAnswered === "true");
+      const incorrectCards = answeredCards.filter((c) => c.dataset.correctAnswered === "false");
+
+      const answeredCount = answeredCards.length;
+      const totalCount = quizData.length;
+      const correctCount = correctCards.length;
+      const incorrectCount = incorrectCards.length;
+      const scorePercent = totalCount > 0 ? Math.round((correctCount / totalCount) * 100) : 0;
+      const progressPercent = totalCount > 0 ? (answeredCount / totalCount) * 100 : 0;
+
+      document.getElementById("answeredCount").textContent = answeredCount;
+      document.getElementById("totalCount").textContent = totalCount;
+      document.getElementById("correctCount").textContent = correctCount;
+      document.getElementById("incorrectCount").textContent = incorrectCount;
+      document.getElementById("scorePercent").textContent = scorePercent;
+      document.getElementById("progressBar").style.width = progressPercent + "%";
+    }
+
+    function resetQuiz() {
+      const container = document.getElementById("quizContainer");
+      container.innerHTML = "";
+      renderQuiz();
+    }
+
+    function downloadCurrentHtml() {
+      const doctype = "<!DOCTYPE html>\n";
+      const htmlElement = document.documentElement.cloneNode(true);
+      const scripts = htmlElement.querySelectorAll("script");
+      scripts.forEach((s) => {
+        const replacement = document.createElement("script");
+        if (s.src) replacement.src = s.src;
+        else replacement.textContent = s.textContent;
+        s.parentNode.replaceChild(replacement, s);
+      });
+      const fullHtml = doctype + htmlElement.outerHTML;
+      const blob = new Blob([fullHtml], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "securityplus_architecture_infrastructure_quiz.html";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    document.getElementById("resetQuizBtn").addEventListener("click", resetQuiz);
+    document.getElementById("downloadHtmlBtn").addEventListener("click", downloadCurrentHtml);
+
+    renderQuiz();
+  </script>
+</body>
+</html>

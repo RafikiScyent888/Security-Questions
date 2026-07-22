@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Security+ Quiz – Vulnerability Management & Computing Resources Security</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-alt: #020617;
+      --card: #020617;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.12);
+      --border-subtle: #1e293b;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --text-soft: #6b7280;
+      --correct: #22c55e;
+      --incorrect: #ef4444;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.85);
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-main);
+      background: radial-gradient(circle at top, #1e293b 0, #020617 45%, #000 100%);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+    .app-shell {
+      width: 100%;
+      max-width: 1100px;
+      background: #020617;
+      border-radius: 28px;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      box-shadow: var(--shadow-soft);
+      padding: 24px 24px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    header.app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .title-block { display: flex; flex-direction: column; gap: 4px; }
+    .title-row { display: flex; align-items: center; gap: 10px; }
+    .title-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px; border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      font-size: 11px; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text-soft);
+    }
+    .title-pill-dot {
+      width: 7px; height: 7px; border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
+    }
+    h1 {
+      margin: 0; font-size: 22px; letter-spacing: 0.02em;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .title-highlight {
+      padding: 2px 8px; border-radius: 999px;
+      background: rgba(56, 189, 248, 0.16);
+      border: 1px solid rgba(56, 189, 248, 0.45);
+      font-size: 13px; color: #e0f2fe;
+    }
+    .subtitle { margin: 0; font-size: 13px; color: var(--text-soft); }
+    .meta-block {
+      display: flex; flex-direction: column;
+      align-items: flex-end; gap: 6px; font-size: 12px;
+    }
+    .meta-row { display: flex; align-items: center; gap: 8px; }
+    .meta-chip {
+      padding: 4px 10px; border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      color: var(--text-muted);
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .meta-chip strong { color: #e5e7eb; }
+    .meta-dot {
+      width: 6px; height: 6px; border-radius: 999px;
+      background: #38bdf8;
+    }
+    .download-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.7);
+      background: radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.35), rgba(15, 23, 42, 0.95));
+      color: #e0f2fe;
+      padding: 6px 14px; font-size: 12px;
+      display: inline-flex; align-items: center; gap: 6px;
+      cursor: pointer;
+    }
+    .download-btn-icon {
+      width: 14px; height: 14px; border-radius: 4px;
+      border: 1px solid rgba(226, 232, 240, 0.6);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 10px;
+    }
+    .download-btn-label {
+      font-weight: 500; letter-spacing: 0.03em; text-transform: uppercase;
+    }
+    .download-btn-sub { font-size: 10px; color: #bae6fd; }
+    .quiz-shell {
+      margin-top: 10px; border-radius: 22px;
+      background: #020617;
+      border: 1px solid rgba(30, 64, 175, 0.7);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.9);
+      padding: 18px 18px 20px;
+    }
+    .quiz-header-row {
+      display: flex; justify-content: space-between;
+      align-items: center; gap: 12px; margin-bottom: 14px;
+    }
+    .quiz-progress { display: flex; flex-direction: column; gap: 6px; }
+    .progress-label-row {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 11px; color: var(--text-soft);
+      text-transform: uppercase; letter-spacing: 0.12em;
+    }
+    .progress-pill {
+      padding: 2px 8px; border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 10px; color: var(--text-muted);
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .progress-pill span:first-child { color: #e5e7eb; }
+    .progress-bar-outer {
+      width: 220px; max-width: 100%; height: 7px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(30, 64, 175, 0.9);
+      padding: 1px;
+    }
+    .progress-bar-inner {
+      height: 100%; border-radius: 999px;
+      background: linear-gradient(90deg, #22c55e, #38bdf8, #6366f1);
+      width: 0%;
+      transition: width 0.2s ease-out;
+    }
+    .score-block {
+      display: flex; flex-direction: column;
+      align-items: flex-end; gap: 4px;
+      font-size: 11px; color: var(--text-soft);
+    }
+    .score-main {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 4px 10px; border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+    .score-main strong { color: #e5e7eb; }
+    .score-dot {
+      width: 7px; height: 7px; border-radius: 999px;
+      background: #38bdf8;
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.25);
+    }
+    .score-sub { font-size: 10px; color: var(--text-muted); }
+    .question-card {
+      margin-top: 6px; border-radius: 18px;
+      background: #020617;
+      border: 1px solid rgba(30, 64, 175, 0.7);
+      padding: 14px 14px 12px;
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.9);
+    }
+    .question-header {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; gap: 10px; margin-bottom: 10px;
+    }
+    .question-title-block { display: flex; flex-direction: column; gap: 4px; }
+    .question-label-row {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 11px; color: var(--text-soft);
+      text-transform: uppercase; letter-spacing: 0.12em;
+    }
+    .question-index-pill {
+      padding: 2px 8px; border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 10px; color: var(--text-muted);
+      display: inline-flex; gap: 4px;
+    }
+    .question-index-pill span:first-child { color: #e5e7eb; }
+    .question-text { margin: 0; font-size: 14px; line-height: 1.5; }
+    .question-meta { font-size: 11px; color: var(--text-soft); text-align: right; }
+    .answers-grid {
+      margin-top: 8px;
+      display: grid; grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    @media (min-width: 720px) {
+      .answers-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .answer-option {
+      position: relative;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(30, 64, 175, 0.7);
+      padding: 8px 9px;
+      display: flex; align-items: flex-start; gap: 8px;
+      cursor: pointer; font-size: 13px;
+      color: #e5e7eb;
+    }
+    .answer-option.disabled { cursor: default; opacity: 0.9; }
+    .answer-option.correct {
+      border-color: rgba(34, 197, 94, 0.95);
+      background: rgba(22, 163, 74, 0.18);
+    }
+    .answer-option.incorrect {
+      border-color: rgba(239, 68, 68, 0.95);
+      background: rgba(185, 28, 28, 0.18);
+    }
+    .answer-badge {
+      min-width: 22px; height: 22px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; color: var(--text-muted);
+    }
+    .answer-text { flex: 1; text-align: left; }
+    .feedback-row {
+      margin-top: 8px;
+      display: flex; justify-content: space-between;
+      align-items: center; gap: 8px;
+      font-size: 12px;
+    }
+    .feedback-message { color: var(--text-muted); }
+    .feedback-message.correct { color: var(--correct); }
+    .feedback-message.incorrect { color: var(--incorrect); }
+    .explanation-toggle {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+      padding: 4px 10px;
+      font-size: 11px;
+      display: inline-flex; align-items: center; gap: 6px;
+      cursor: pointer;
+    }
+    .explanation-panel {
+      margin-top: 6px;
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(30, 64, 175, 0.7);
+      padding: 8px 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+      display: none;
+    }
+    .quiz-footer {
+      margin-top: 14px;
+      display: flex; justify-content: space-between;
+      align-items: center; gap: 10px;
+      font-size: 11px; color: var(--text-soft);
+    }
+    .legend-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 3px 8px; border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+    .legend-dot {
+      width: 8px; height: 8px; border-radius: 999px;
+    }
+    .legend-dot.correct { background: var(--correct); }
+    .legend-dot.incorrect { background: var(--incorrect); }
+    .reset-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+      padding: 5px 12px;
+      font-size: 11px;
+      display: inline-flex; align-items: center; gap: 6px;
+      cursor: pointer;
+    }
+    .reset-btn-icon { font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="title-block">
+        <div class="title-row">
+          <div class="title-pill">
+            <span class="title-pill-dot"></span>
+            <span>Interactive Exam Engine</span>
+          </div>
+        </div>
+        <h1>
+          CompTIA Security+ Quiz
+          <span class="title-highlight">Vulnerability Mgmt &amp; Computing Security</span>
+        </h1>
+        <p class="subtitle">
+          30-question practice set focusing on vulnerability management and securing computing resources.
+        </p>
+      </div>
+      <div class="meta-block">
+        <div class="meta-row">
+          <div class="meta-chip">
+            <span class="meta-dot"></span>
+            <strong>Mode:</strong>
+            <span>Study &amp; Instant Feedback</span>
+          </div>
+        </div>
+        <button id="downloadHtmlBtn" class="download-btn" type="button">
+          <span class="download-btn-icon">↓</span>
+          <span class="download-btn-label">Download</span>
+          <span class="download-btn-sub">This quiz as HTML</span>
+        </button>
+      </div>
+    </header>
+    <main class="quiz-shell">
+      <div class="quiz-header-row">
+        <div class="quiz-progress">
+          <div class="progress-label-row">
+            <span>Progress</span>
+            <div class="progress-pill">
+              <span id="answeredCount">0</span>/<span id="totalCount">30</span> answered
+            </div>
+          </div>
+          <div class="progress-bar-outer">
+            <div id="progressBar" class="progress-bar-inner"></div>
+          </div>
+        </div>
+        <div class="score-block">
+          <div class="score-main">
+            <span class="score-dot"></span>
+            <span>Score:</span>
+            <strong><span id="scorePercent">0</span>%</strong>
+          </div>
+          <div class="score-sub">
+            Correct: <span id="correctCount">0</span> •
+            Incorrect: <span id="incorrectCount">0</span>
+          </div>
+        </div>
+      </div>
+      <section id="quizContainer"></section>
+      <footer class="quiz-footer">
+        <div class="quiz-footer-left">
+          <div class="legend-pill">
+            <span class="legend-dot correct"></span>
+            <span>Correct selection</span>
+          </div>
+          <div class="legend-pill">
+            <span class="legend-dot incorrect"></span>
+            <span>Incorrect selection</span>
+          </div>
+        </div>
+        <div class="quiz-footer-right">
+          <button id="resetQuizBtn" class="reset-btn" type="button">
+            <span class="reset-btn-icon">↺</span>
+            <span>Reset quiz</span>
+          </button>
+        </div>
+      </footer>
+    </main>
+  </div>
+  <script>
+const quizData = [
+  {
+    id: 1,
+    question:
+      "A security team needs a recurring method to identify missing patches and insecure configurations across all managed servers. Which approach best supports this requirement?",
+    answers: [
+      {
+        label: "A",
+        text: "Use credentialed vulnerability scans to validate configuration states across all managed systems.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "Rely on periodic log reviews to identify configuration drift across production workloads.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "Deploy agentless discovery tools that highlight network‑visible weaknesses during routine sweeps.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "Analyze firewall rule changes to detect potential exposure created by misaligned access paths.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Credentialed scans provide deeper visibility into host‑level settings and patch status."
+  },
+
+  {
+    id: 2,
+    question:
+      "A company wants to safely verify whether identified weaknesses can actually be exploited in a controlled environment. Which approach best meets this objective?",
+    answers: [
+      {
+        label: "A",
+        text: "Conduct targeted penetration testing to confirm whether identified weaknesses are practically exploitable.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "Review historical incident reports to determine whether similar vulnerabilities were exploited previously.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "Use passive monitoring tools to observe abnormal behavior without interacting with the system.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "Rely on automated patch deployment to mitigate weaknesses before validation occurs.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Penetration testing validates whether a vulnerability can be exploited under real conditions."
+  },
+
+  {
+    id: 3,
+    question:
+      "A critical remote code execution flaw is discovered on a public web server. Which factor most increases the urgency of addressing this vulnerability?",
+    answers: [
+      {
+        label: "A",
+        text: "The system is directly internet‑facing and accessible to unauthenticated external attackers.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "The server hosts non‑sensitive content that rarely changes during normal operations.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "The vulnerability requires multiple chained conditions before exploitation is possible.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "The system is monitored by a SIEM that alerts on suspicious inbound traffic.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Internet‑facing systems are at significantly higher risk because attackers can reach them directly."
+  },
+
+  {
+    id: 4,
+    question:
+      "A security analyst is reviewing a vulnerability scoring report and wants to understand how easily an attacker could exploit a weakness. Which focus best supports this analysis?",
+    answers: [
+      {
+        label: "A",
+        text: "Evaluate exploitability metrics such as attack vector, complexity, and required privileges.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "Prioritize vulnerabilities based solely on the age of the published advisory.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "Review system uptime statistics to determine how frequently services restart.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "Analyze user login frequency to estimate potential exposure to credential misuse.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Exploitability metrics indicate how easily an attacker can leverage a vulnerability."
+  },
+
+  {
+    id: 5,
+    question:
+      "A vulnerability with a high severity score is found on an isolated lab system with no production connectivity. Which concept best explains why remediation may be deprioritized?",
+    answers: [
+      {
+        label: "A",
+        text: "The system’s limited exposure reduces the likelihood of meaningful exploitation attempts.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "The vulnerability is unlikely to generate alerts within centralized monitoring tools.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "The system’s hardware lifecycle is nearing end‑of‑support within the next year.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "The vulnerability affects only optional features not enabled on the system.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Risk is influenced by exposure; isolated systems present far less opportunity for exploitation."
+  },
+
+  {
+    id: 6,
+    question:
+      "After a vulnerability scan completes, several new findings are identified on production systems. Which step should occur next in a formal vulnerability management process?",
+    answers: [
+      {
+        label: "A",
+        text: "Prioritize the findings based on severity, asset value, and operational impact.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "Immediately deploy patches to all affected systems without further evaluation.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "Archive the scan results for long‑term compliance reporting requirements.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "Disable network access to all systems showing new vulnerabilities.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Triage ensures vulnerabilities are addressed in an order aligned with business risk."
+  },
+
+  {
+    id: 7,
+    question:
+      "A security engineer notices that some vulnerabilities are not being detected on systems that are known to be unpatched. Which scanning characteristic is most likely contributing to these false negatives?",
+    answers: [
+      {
+        label: "A",
+        text: "The scans are running without authentication, limiting visibility into host‑level details.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "The scans are scheduled too frequently, causing incomplete data collection cycles.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "The scanner is configured to ignore informational findings during routine assessments.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "The network uses redundant routing paths that obscure endpoint identification.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Unauthenticated scans often miss vulnerabilities that require deeper system access to detect."
+  },
+
+  {
+    id: 8,
+    question:
+      "A team wants to ensure that newly deployed virtual machines consistently follow a hardened baseline before entering production. Which approach best supports this objective?",
+    answers: [
+      {
+        label: "A",
+        text: "Use standardized system images that enforce consistent baseline configurations across deployments.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "Allow administrators to manually configure each system according to documented guidelines.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "Enable automatic updates to apply patches immediately after system installation.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "Perform quarterly audits to verify whether deployed systems match expected configurations.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Standardized images ensure new systems start with a consistent, hardened configuration."
+  },
+
+  {
+    id: 9,
+    question:
+      "An application relies heavily on third-party libraries. The security team wants to reduce the risk of vulnerabilities introduced through these components. Which approach is most appropriate?",
+    answers: [
+      {
+        label: "A",
+        text: "Track and update third‑party components using a structured dependency management process.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "Disable all optional features within the application to reduce its overall attack surface.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "Increase logging verbosity to detect abnormal behavior caused by outdated libraries.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "Restrict outbound network access to prevent libraries from communicating externally.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Dependency management ensures third‑party components remain updated and free of known vulnerabilities."
+  },
+
+  {
+    id: 10,
+    question:
+      "A medium-severity vulnerability is identified on a mission-critical database that stores regulated data. Which consideration could justify treating this as a higher-priority issue?",
+    answers: [
+      {
+        label: "A",
+        text: "The system stores sensitive regulated data that increases the impact of potential compromise.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "The vulnerability affects a feature that is rarely used during normal operations.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "The system is hosted on hardware nearing its scheduled replacement cycle.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "The database is backed up daily using encrypted storage mechanisms.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Data sensitivity increases the potential impact, raising the priority of remediation."
+  },
+
+  {
+    id: 11,
+    question:
+      "A workstation fleet is being reviewed to reduce the overall attack surface. Which approach most directly supports this goal?",
+    answers: [
+      {
+        label: "A",
+        text: "Restrict which applications can run by enforcing approved software execution policies.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "Increase system logging levels to capture more detailed operational activity.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "Extend patch deployment windows to reduce disruption during business hours.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "Enable remote desktop access for administrators to streamline maintenance tasks.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Application control reduces the attack surface by limiting unauthorized software execution."
+  },
+
+  {
+    id: 12,
+    question:
+      "A security architect wants to prevent unauthorized code from running during system startup on corporate laptops. Which approach best addresses this requirement?",
+    answers: [
+      {
+        label: "A",
+        text: "Enable secure boot mechanisms that validate trusted components during system initialization.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "Require multi‑factor authentication before users can access the operating system.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "Encrypt the system drive to protect data stored on the device.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "Disable unused hardware ports to limit opportunities for physical tampering.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Secure boot ensures only trusted components load during system startup."
+  },
+
+  {
+    id: 13,
+    question:
+      "A security program wants to define how quickly vulnerabilities must be remediated based on severity. Which type of guidance should describe these expectations?",
+    answers: [
+      {
+        label: "A",
+        text: "Document remediation timelines within formal vulnerability management policy requirements.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "Store remediation expectations in archived audit reports for future reference.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "Communicate remediation expectations informally during team meetings and briefings.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "Include remediation expectations within optional training materials for administrators.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Policies define required remediation timelines and establish organizational expectations."
+  },
+
+  {
+    id: 14,
+    question:
+      "Different administrators are interpreting vulnerability scan results in inconsistent ways, leading to uneven remediation. Which approach best improves consistency?",
+    answers: [
+      {
+        label: "A",
+        text: "Adopt standardized criteria for interpreting vulnerability severity and required actions.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "Allow each team to determine its own remediation priorities based on workload.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "Increase scan frequency to ensure more up‑to‑date vulnerability information.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "Disable low‑severity findings to reduce the number of items requiring review.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Standardized interpretation ensures consistent remediation decisions across teams."
+  },
+
+  {
+    id: 15,
+    question:
+      "Users sometimes access corporate resources from unmanaged or shared devices. The organization wants to limit the risk of credential theft on those endpoints. Which approach is most appropriate?",
+    answers: [
+      {
+        label: "A",
+        text: "Provide isolated virtual desktop environments that prevent sensitive activity on untrusted devices.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "Require users to rotate passwords more frequently when using shared devices.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "Disable all remote access capabilities to prevent connections from unmanaged systems.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "Allow browser‑based access only when users acknowledge additional security warnings.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Virtual desktops isolate corporate activity from untrusted or unmanaged endpoints."
+  },
+
+  {
+    id: 16,
+    question:
+      "A known vulnerability exists on a production server. The organization wants to reduce the likelihood that this weakness will be exploited. Which approach is most effective?",
+    answers: [
+      {
+        label: "A",
+        text: "Apply the appropriate patch to eliminate the underlying vulnerability on the system.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "Increase monitoring frequency to detect suspicious activity targeting the system.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "Restrict user login hours to reduce opportunities for unauthorized access attempts.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "Disable non‑essential services to reduce the number of running processes.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Patching directly removes the vulnerability, reducing the likelihood of exploitation."
+  },
+
+  {
+    id: 17,
+    question:
+      "A vulnerability report indicates that a service is using deprecated cipher suites. Which approach best addresses this issue?",
+    answers: [
+      {
+        label: "A",
+        text: "Update the service configuration to use modern, supported cryptographic algorithms.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "Increase key rotation frequency to compensate for weaker encryption strength.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "Enable additional logging to capture details about encrypted session activity.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "Restrict access to the service to reduce exposure to external users.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Replacing deprecated cipher suites ensures secure, modern cryptographic protection."
+  },
+
+  {
+    id: 18,
+    question:
+      "Several servers with the same intended role show different security settings and patch levels. Which issue is most likely occurring?",
+    answers: [
+      {
+        label: "A",
+        text: "Configuration drift is causing systems to deviate from their expected baseline state.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "The servers are using incompatible hardware that prevents consistent patching.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "The systems are receiving excessive updates that exceed vendor recommendations.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "The servers are assigned to different network segments with varying access rules.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Configuration drift occurs when systems diverge from their intended baseline."
+  },
+
+  {
+    id: 19,
+    question:
+      "A compromised user account should have limited ability to affect other computing resources. Which approach best supports this objective?",
+    answers: [
+      {
+        label: "A",
+        text: "Enforce least‑privilege access controls to limit what each account can perform.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "Require users to authenticate more frequently during normal business operations.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "Enable verbose logging to capture detailed user activity across all systems.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "Increase password complexity requirements for all user accounts.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Least‑privilege access limits the impact of a compromised account."
+  },
+
+  {
+    id: 20,
+    question:
+      "After remediation work is completed for a critical vulnerability, the security team wants to confirm that the issue is no longer present. Which approach is most appropriate?",
+    answers: [
+      {
+        label: "A",
+        text: "Perform a follow‑up scan to verify that the vulnerability has been resolved.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "Review patch notes to confirm that the update addressed the vulnerability.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "Monitor system logs for several days to ensure no related alerts appear.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "Request user feedback to determine whether system behavior has improved.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Follow‑up scanning confirms whether remediation successfully removed the vulnerability."
+  },
+  {
+    id: 21,
+    question:
+      "An organization wants to reduce the chance that malware will exploit unpatched software on endpoints. Which approach best supports this goal?",
+    answers: [
+      {
+        label: "A",
+        text: "Ensure endpoint applications receive timely updates through a structured patch management process.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "Increase antivirus scan frequency to detect malware before it becomes active.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "Restrict user access to administrative tools during normal business operations.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "Enable detailed event logging to capture suspicious activity across all endpoints.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Regular patching reduces the number of exploitable software vulnerabilities on endpoints."
+  },
+
+  {
+    id: 22,
+    question:
+      "Business priorities and threat landscapes change over time. Which approach best ensures that vulnerability management activities remain aligned with these changes?",
+    answers: [
+      {
+        label: "A",
+        text: "Conduct periodic reviews to adjust vulnerability priorities based on updated business needs.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "Increase the number of vulnerability scans performed each week for better visibility.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "Assign remediation tasks to whichever team has the most available resources.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "Disable low‑severity findings to reduce the volume of items requiring review.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Regular reviews ensure vulnerability priorities reflect current business and threat conditions."
+  },
+
+  {
+    id: 23,
+    question:
+      "A workstation image includes several legacy services that are not required for business operations. Which approach best reduces potential vulnerabilities from these services?",
+    answers: [
+      {
+        label: "A",
+        text: "Remove unnecessary services through a hardened baseline to reduce the attack surface.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "Increase system monitoring to detect unusual activity associated with legacy components.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "Restrict outbound network access to prevent legacy services from communicating externally.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "Schedule quarterly audits to verify whether legacy components remain active.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Hardening eliminates unnecessary services, reducing exposure to avoidable vulnerabilities."
+  },
+
+  {
+    id: 24,
+    question:
+      "Laptops used by employees may be lost or stolen. The organization wants to protect the data stored on these devices. Which approach is most appropriate?",
+    answers: [
+      {
+        label: "A",
+        text: "Use full‑disk encryption to protect stored data if the device is lost or stolen.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "Require users to change their passwords more frequently when traveling.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "Disable USB ports to prevent unauthorized data transfers from the device.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "Enable remote desktop access to reduce the need for local data storage.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Full‑disk encryption protects data even if the physical device is compromised."
+  },
+
+  {
+    id: 25,
+    question:
+      "Major infrastructure changes have recently been deployed. The security team wants to identify any new weaknesses introduced by these changes. Which approach is most suitable?",
+    answers: [
+      {
+        label: "A",
+        text: "Perform targeted vulnerability scans following major changes to detect newly introduced issues.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "Delay scanning until the next scheduled assessment cycle to avoid operational disruption.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "Rely on user reports to identify any unexpected behavior after the changes.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "Increase firewall logging to capture unusual traffic patterns after deployment.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Post‑change scanning identifies vulnerabilities introduced during infrastructure updates."
+  },
+
+  {
+    id: 26,
+    question:
+      "The security team wants to make it harder for attackers to exploit memory corruption vulnerabilities in applications. Which approach best supports this goal?",
+    answers: [
+      {
+        label: "A",
+        text: "Enable exploit‑mitigation features such as ASLR and DEP to reduce attack success.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "Increase application logging to detect abnormal memory usage patterns.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "Restrict user permissions to prevent unauthorized access to application files.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "Require code reviews for all future software updates to improve quality.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Exploit‑mitigation features make memory‑based attacks significantly harder to execute."
+  },
+
+  {
+    id: 27,
+    question:
+      "A security team wants to ensure that only approved, hardened operating system builds are used for new servers. Which approach best enforces this requirement?",
+    answers: [
+      {
+        label: "A",
+        text: "Provision new servers using standardized, hardened images maintained by the security team.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "Allow administrators to configure new servers manually using documented guidelines.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "Require post‑deployment audits to verify whether servers meet baseline expectations.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "Enable automatic updates to ensure servers receive patches immediately after deployment.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Standardized hardened images ensure consistent, secure server deployments."
+  },
+
+  {
+    id: 28,
+    question:
+      "A newly disclosed vulnerability is being actively exploited in environments similar to the organization’s infrastructure. Which factor most strongly indicates that this issue requires emergency remediation?",
+    answers: [
+      {
+        label: "A",
+        text: "Active exploitation in similar environments significantly increases the likelihood of attack.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "The vulnerability affects a feature that is rarely used during normal operations.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "The vendor has not yet released a patch for the vulnerability.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "The vulnerability was published recently and has limited public documentation.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Active exploitation indicates attackers are already targeting this vulnerability."
+  },
+
+  {
+    id: 29,
+    question:
+      "After an initial compromise, the organization wants to limit the ability of malware to move laterally between systems. Which approach best supports this objective?",
+    answers: [
+      {
+        label: "A",
+        text: "Segment internal networks to restrict unauthorized movement between systems.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "Increase password complexity requirements for all user accounts.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "Enable verbose logging to capture detailed information about system interactions.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "Require multi‑factor authentication for all internal administrative actions.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Segmentation limits how far malware can spread after an initial compromise."
+  },
+
+  {
+    id: 30,
+    question:
+      "Leadership wants vulnerability management activities to be repeatable, measurable, and suitable for long-term improvement. Which approach best supports this requirement?",
+    answers: [
+      {
+        label: "A",
+        text: "Establish governance processes that define metrics, reporting, and continuous improvement goals.",
+        correct: true
+      },
+      {
+        label: "B",
+        text: "Increase scan frequency to gather more data for long‑term analysis.",
+        correct: false
+      },
+      {
+        label: "C",
+        text: "Assign remediation tasks to teams based on available staffing levels.",
+        correct: false
+      },
+      {
+        label: "D",
+        text: "Store vulnerability reports indefinitely to maintain historical reference material.",
+        correct: false
+      }
+    ],
+    explanation:
+      "Governance establishes structure, metrics, and consistency for long‑term program maturity."
+  }
+];
+      function shuffleArray(array) {
+      const arr = array.slice();
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function renderQuiz() {
+      const container = document.getElementById("quizContainer");
+      container.innerHTML = "";
+      quizData.forEach((q, index) => {
+        const shuffledAnswers = shuffleArray(q.answers).map((ans, idx) => ({
+          ...ans,
+          displayLabel: ["A", "B", "C", "D"][idx]
+        }));
+
+        const card = document.createElement("article");
+        card.className = "question-card";
+        card.dataset.questionId = q.id;
+
+        const header = document.createElement("div");
+        header.className = "question-header";
+
+        const titleBlock = document.createElement("div");
+        titleBlock.className = "question-title-block";
+
+        const labelRow = document.createElement("div");
+        labelRow.className = "question-label-row";
+        labelRow.innerHTML = `
+          <span>Question</span>
+          <div class="question-index-pill">
+            <span>${index + 1}</span> of <span>${quizData.length}</span>
+          </div>
+        `;
+
+        const qText = document.createElement("p");
+        qText.className = "question-text";
+        qText.textContent = q.question;
+
+        titleBlock.appendChild(labelRow);
+        titleBlock.appendChild(qText);
+
+        const meta = document.createElement("div");
+        meta.className = "question-meta";
+        meta.textContent = "Vulnerability Mgmt & Computing Security";
+
+        header.appendChild(titleBlock);
+        header.appendChild(meta);
+
+        const answersGrid = document.createElement("div");
+        answersGrid.className = "answers-grid";
+
+        shuffledAnswers.forEach((ans) => {
+          const option = document.createElement("button");
+          option.type = "button";
+          option.className = "answer-option";
+          option.dataset.correct = ans.correct ? "true" : "false";
+          option.dataset.originalLabel = ans.label;
+          option.innerHTML = `
+            <div class="answer-badge">${ans.displayLabel}</div>
+            <div class="answer-text">${ans.text}</div>
+          `;
+          option.addEventListener("click", () => handleAnswerClick(card, option));
+          answersGrid.appendChild(option);
+        });
+
+        const feedbackRow = document.createElement("div");
+        feedbackRow.className = "feedback-row";
+
+        const feedbackMessage = document.createElement("div");
+        feedbackMessage.className = "feedback-message";
+        feedbackMessage.textContent = "";
+
+        const explanationToggle = document.createElement("button");
+        explanationToggle.type = "button";
+        explanationToggle.className = "explanation-toggle";
+        explanationToggle.innerHTML = `
+          <span>Explanation</span>
+          <span>▼</span>
+        `;
+
+        const explanationPanel = document.createElement("div");
+        explanationPanel.className = "explanation-panel";
+        explanationPanel.innerHTML = `<strong>Why this is correct:</strong> ${q.explanation}`;
+
+        explanationToggle.addEventListener("click", () => {
+          const isVisible = explanationPanel.style.display === "block";
+          explanationPanel.style.display = isVisible ? "none" : "block";
+          explanationToggle.lastElementChild.textContent = isVisible ? "▼" : "▲";
+        });
+
+        feedbackRow.appendChild(feedbackMessage);
+        feedbackRow.appendChild(explanationToggle);
+
+        card.appendChild(header);
+        card.appendChild(answersGrid);
+        card.appendChild(feedbackRow);
+        card.appendChild(explanationPanel);
+
+        container.appendChild(card);
+      });
+
+      updateTotals();
+    }
+
+    function handleAnswerClick(card, selectedOption) {
+      if (card.dataset.answered === "true") return;
+
+      const isCorrect = selectedOption.dataset.correct === "true";
+      const options = card.querySelectorAll(".answer-option");
+      const feedbackMessage = card.querySelector(".feedback-message");
+
+      options.forEach((opt) => {
+        opt.classList.add("disabled");
+        if (opt.dataset.correct === "true") {
+          opt.classList.add("correct");
+        }
+      });
+
+      if (!isCorrect) {
+        selectedOption.classList.add("incorrect");
+      }
+
+      if (isCorrect) {
+        feedbackMessage.textContent =
+          "Correct — this aligns with secure vulnerability and resource management practices.";
+        feedbackMessage.classList.add("correct");
+      } else {
+        feedbackMessage.textContent =
+          "Not quite — review the explanation to see why another option fits better.";
+        feedbackMessage.classList.add("incorrect");
+      }
+
+      card.dataset.answered = "true";
+      card.dataset.correctAnswered = isCorrect ? "true" : "false";
+
+      updateTotals();
+    }
+
+    function updateTotals() {
+      const cards = Array.from(document.querySelectorAll(".question-card"));
+      const answeredCards = cards.filter((c) => c.dataset.answered === "true");
+      const correctCards = answeredCards.filter((c) => c.dataset.correctAnswered === "true");
+      const incorrectCards = answeredCards.filter((c) => c.dataset.correctAnswered === "false");
+
+      const answeredCount = answeredCards.length;
+      const totalCount = quizData.length;
+      const correctCount = correctCards.length;
+      const incorrectCount = incorrectCards.length;
+      const scorePercent =
+        totalCount > 0 ? Math.round((correctCount / totalCount) * 100) : 0;
+      const progressPercent =
+        totalCount > 0 ? (answeredCount / totalCount) * 100 : 0;
+
+      document.getElementById("answeredCount").textContent = answeredCount;
+      document.getElementById("totalCount").textContent = totalCount;
+      document.getElementById("correctCount").textContent = correctCount;
+      document.getElementById("incorrectCount").textContent = incorrectCount;
+      document.getElementById("scorePercent").textContent = scorePercent;
+      document.getElementById("progressBar").style.width =
+        progressPercent + "%";
+    }
+
+    function resetQuiz() {
+      const container = document.getElementById("quizContainer");
+      container.innerHTML = "";
+      renderQuiz();
+    }
+
+    function downloadCurrentHtml() {
+      const doctype = "<!DOCTYPE html>\n";
+      const htmlElement = document.documentElement.cloneNode(true);
+      const scripts = htmlElement.querySelectorAll("script");
+      scripts.forEach((s) => {
+        const replacement = document.createElement("script");
+        if (s.src) replacement.src = s.src;
+        else replacement.textContent = s.textContent;
+        s.parentNode.replaceChild(replacement, s);
+      });
+      const fullHtml = doctype + htmlElement.outerHTML;
+      const blob = new Blob([fullHtml], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "securityplus_vuln_mgmt_computing_security_quiz.html";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    document
+      .getElementById("resetQuizBtn")
+      .addEventListener("click", resetQuiz);
+    document
+      .getElementById("downloadHtmlBtn")
+      .addEventListener("click", downloadCurrentHtml);
+
+    renderQuiz();
+  </script>
+</body>
+</html>

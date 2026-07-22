@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Security+ Exam Mode — Incident Response & Indicators</title>
+<style>
+  :root{
+    --bg: #071427;          /* dark navy */
+    --panel: #0b1f3b;       /* card */
+    --panel-2: #0e2a4f;     /* hover */
+    --border: #163a66;      /* borders */
+    --text: #e7f0ff;        /* primary text */
+    --muted: #b8c8e6;       /* secondary */
+    --accent: #4aa3ff;      /* exam blue */
+    --accent-2:#1e7fe0;     /* darker blue */
+    --good: #61d67a;        /* correct */
+    --bad: #ff6b6b;         /* incorrect */
+    --shadow: rgba(0,0,0,0.35);
+  }
+
+  * { box-sizing: border-box; }
+  body{
+    margin:0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: radial-gradient(1200px 900px at 20% 0%, #0c2a55 0%, var(--bg) 55%);
+    color: var(--text);
+  }
+
+  .wrap{
+    max-width: 980px;
+    margin: 26px auto;
+    padding: 0 14px 28px;
+  }
+
+  h1{
+    margin: 0 0 8px 0;
+    font-size: 1.35rem;
+    letter-spacing: .2px;
+  }
+
+  .sub{
+    margin: 0 0 16px 0;
+    color: var(--muted);
+    font-size: .98rem;
+  }
+
+  .card{
+    background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 8px 20px var(--shadow);
+    backdrop-filter: blur(6px);
+  }
+
+  .toprow{
+    display:flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+
+  .pill{
+    display:inline-flex;
+    align-items:center;
+    gap: 8px;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: rgba(255,255,255,.03);
+    color: var(--muted);
+    font-size: .92rem;
+  }
+
+  .pill strong{ color: var(--text); font-weight: 700; }
+
+  .progressbar{
+    height: 10px;
+    width: 100%;
+    background: rgba(255,255,255,.05);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+    margin: 10px 0 14px 0;
+  }
+  .progressbar > div{
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    border-radius: 999px;
+    transition: width .25s ease;
+  }
+
+  .question{
+    font-size: 1.12rem;
+    font-weight: 800;
+    margin: 0 0 12px 0;
+    color: var(--text);
+  }
+
+  .choices{ margin-top: 8px; }
+
+  .choice{
+    display:flex;
+    gap: 12px;
+    align-items:flex-start;
+    padding: 12px 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin: 10px 0;
+    background: rgba(255,255,255,.02);
+    cursor:pointer;
+    user-select:none;
+  }
+
+  .choice:hover{ background: rgba(74,163,255,.10); border-color: rgba(74,163,255,.35); }
+  .choice.disabled{ opacity: .9; cursor:not-allowed; }
+  .choice.selected{ outline: 2px solid rgba(74,163,255,.45); background: rgba(74,163,255,.08); }
+
+  .letter{
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    border-radius: 10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.03);
+    font-weight: 800;
+    color: var(--text);
+  }
+
+  .text{ flex: 1; color: var(--text); }
+
+  .feedback{
+    margin-top: 10px;
+    font-weight: 800;
+    font-size: 1.03rem;
+  }
+  .correct{ color: var(--good); }
+  .incorrect{ color: var(--bad); }
+
+  details{
+    margin-top: 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 12px;
+    background: rgba(255,255,255,.02);
+  }
+  summary{
+    cursor:pointer;
+    font-weight: 800;
+    color: var(--accent);
+    outline: none;
+  }
+  .explain{
+    margin-top: 8px;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+
+  .actions{
+    display:flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+  }
+
+  button{
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.04);
+    color: var(--text);
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-weight: 800;
+    cursor:pointer;
+  }
+  button:hover{ background: rgba(74,163,255,.12); border-color: rgba(74,163,255,.35); }
+  #nextBtn{ display:none; }
+  .foot{
+    margin-top: 14px;
+    color: var(--muted);
+    font-size: .95rem;
+  }
+</style>
+</head>
+
+<body>
+<div class="wrap">
+  <h1>CompTIA Security+ — Exam Mode</h1>
+  <p class="sub">Topic: <strong>Incident Response & Indicators of Malicious Activity</strong> • 30 questions • instant feedback • manual Next • explanations collapsible</p>
+
+  <div class="card">
+    <div class="toprow">
+      <div class="pill">Progress: <strong id="progressText">Question 1 of 30</strong></div>
+      <div class="pill">Score: <strong id="scoreText">0 / 30</strong></div>
+      <div class="pill">Shuffle: <strong>On every reload</strong></div>
+    </div>
+
+    <div class="progressbar"><div id="bar"></div></div>
+
+    <div id="quiz"></div>
+
+    <div class="actions">
+      <button id="restartBtn" onclick="restartQuiz()">Restart (reshuffle)</button>
+      <button id="nextBtn" onclick="nextQuestion()">Next Question</button>
+    </div>
+
+    <div class="foot">Tip: map actions to IR phases (prep, detect/analyze, contain, eradicate, recover, lessons learned) and recognize behavior-based indicators.</div>
+  </div>
+</div>
+
+<script>
+/*
+  Requirements implemented:
+  ✅ Dark navy exam theme
+  ✅ A/B/C/D letter labels
+  ✅ Correct answer shuffles differently on each reload (and each restart)
+     - We shuffle the options array per question at startup; correct stays attached to option object.
+*/
+
+const quizData = [
+  { q:"1. Which incident response phase primarily focuses on limiting spread while investigation continues?",
+    opts:[
+      {t:"Containment by isolating impacted hosts quickly",c:true},
+      {t:"Preparation by updating runbooks and training staff",c:false},
+      {t:"Recovery by returning services to production safely",c:false},
+      {t:"Lessons learned by documenting process gaps clearly",c:false}],
+    exp:"Containment is intended to stop or limit damage and prevent further spread while analysis proceeds." },
+
+  { q:"2. A sudden spike in outbound traffic to unfamiliar IPs most strongly suggests which indicator?",
+    opts:[
+      {t:"Normal telemetry uploading to trusted vendor endpoints",c:false},
+      {t:"Data exfiltration or command-and-control callbacks",c:true},
+      {t:"Routine patch distribution using content delivery nodes",c:false},
+      {t:"Standard directory replication across internal servers",c:false}],
+    exp:"Unusual outbound connections—especially to unknown or rare destinations—commonly indicate C2 activity or exfiltration." },
+
+  { q:"3. Which activity is MOST associated with the lessons learned phase?",
+    opts:[
+      {t:"Holding a post-incident review and updating playbooks",c:true},
+      {t:"Restoring production services after removing malware",c:false},
+      {t:"Capturing volatile memory before powering down hosts",c:false},
+      {t:"Blocking suspicious domains at the secure web gateway",c:false}],
+    exp:"Lessons learned includes after-action reviews, documentation, and process improvements." },
+
+  { q:"4. Multiple failed logins followed by a successful login from the same source is a classic sign of:",
+    opts:[
+      {t:"Credential stuffing or brute-force password attempts",c:true},
+      {t:"Normal authentication retries during network latency",c:false},
+      {t:"Scheduled account provisioning by identity services",c:false},
+      {t:"Routine security scanning by approved assessment tools",c:false}],
+    exp:"Repeated failures followed by success can indicate password guessing or use of leaked credentials." },
+
+  { q:"5. Which action best fits the eradication phase of incident response?",
+    opts:[
+      {t:"Removing malware artifacts and patching the root flaw",c:true},
+      {t:"Isolating affected network segments to stop propagation",c:false},
+      {t:"Drafting the communications plan for stakeholders",c:false},
+      {t:"Capturing baseline metrics for future event detection",c:false}],
+    exp:"Eradication removes the threat and addresses root causes (e.g., patching vulnerabilities, removing persistence)." },
+
+  { q:"6. Unexpected registry modifications that reappear after reboot most commonly indicate:",
+    opts:[
+      {t:"Malware persistence using autorun or startup entries",c:true},
+      {t:"Standard user profile synchronization across endpoints",c:false},
+      {t:"Routine OS tuning applied by enterprise hardening tools",c:false},
+      {t:"Normal application updates adjusting configuration keys",c:false}],
+    exp:"Persistence mechanisms often modify registry run keys or similar startup settings to survive reboots." },
+
+  { q:"7. The primary objective of the recovery phase is to:",
+    opts:[
+      {t:"Return systems to operation with validated clean state",c:true},
+      {t:"Identify the initial infection vector with certainty",c:false},
+      {t:"Create IOCs and distribute them to threat feeds",c:false},
+      {t:"Collect volatile memory and packet captures immediately",c:false}],
+    exp:"Recovery focuses on safely restoring services (often with monitoring and validation) after eradication." },
+
+  { q:"8. Which item is an example of an Indicator of Compromise (IOC)?",
+    opts:[
+      {t:"A known malicious file hash observed on an endpoint",c:true},
+      {t:"A quarterly awareness training completion percentage",c:false},
+      {t:"A documented acceptable use policy with revisions",c:false},
+      {t:"A configuration baseline stored in a change system",c:false}],
+    exp:"IOCs include hashes, domains, IPs, registry keys, filenames, and other artifacts tied to malicious activity." },
+
+  { q:"9. Which solution is MOST commonly used to aggregate and correlate logs for incident analysis?",
+    opts:[
+      {t:"Security Information and Event Management platform",c:true},
+      {t:"Network Time Protocol synchronization service",c:false},
+      {t:"Dynamic Host Configuration Protocol address manager",c:false},
+      {t:"Simple Network Management Protocol polling engine",c:false}],
+    exp:"SIEMs centralize log ingestion and correlation to identify suspicious patterns across sources." },
+
+  { q:"10. Sustained high CPU usage caused by an unfamiliar process on many endpoints is a strong indicator of:",
+    opts:[
+      {t:"Unauthorized cryptocurrency mining or resource hijacking",c:true},
+      {t:"Normal endpoint compliance scanning during off-hours",c:false},
+      {t:"Routine OS indexing and search optimization services",c:false},
+      {t:"Approved software distribution pushing large updates",c:false}],
+    exp:"Cryptominers and some malware families cause notable CPU usage, especially when widespread." },
+
+  { q:"11. A user reports that files were renamed and now have unfamiliar extensions, plus a ransom note appears. This indicates:",
+    opts:[
+      {t:"Ransomware encrypting data and demanding payment",c:true},
+      {t:"Standard disk compression performed by maintenance jobs",c:false},
+      {t:"Normal file format conversion by productivity software",c:false},
+      {t:"Authorized data archival and lifecycle management policy",c:false}],
+    exp:"Renamed/encrypted files and ransom notes are hallmark ransomware indicators." },
+
+  { q:"12. Which artifact is MOST helpful for proving evidence integrity during a forensic process?",
+    opts:[
+      {t:"Cryptographic hash values recorded for the evidence",c:true},
+      {t:"A screenshot of the file directory showing timestamps",c:false},
+      {t:"A printed copy of system information from the host",c:false},
+      {t:"A list of installed applications exported to a text file",c:false}],
+    exp:"Hashes (e.g., SHA-256) help verify evidence has not changed during handling and analysis." },
+
+  { q:"13. In incident response, chain of custody primarily ensures:",
+    opts:[
+      {t:"Documentation of evidence handling from start to finish",c:true},
+      {t:"Automatic restoration of systems using trusted backups",c:false},
+      {t:"Immediate blocking of malicious domains at the firewall",c:false},
+      {t:"Encryption of logs before forwarding to a central system",c:false}],
+    exp:"Chain of custody documents who handled evidence, when, and how, supporting legal defensibility." },
+
+  { q:"14. Which is the BEST example of lateral movement activity in logs?",
+    opts:[
+      {t:"One workstation authenticating to many hosts rapidly",c:true},
+      {t:"A single server applying patches to its own services",c:false},
+      {t:"A user opening a local file from their documents folder",c:false},
+      {t:"A printer requesting DHCP renewal after a lease expires",c:false}],
+    exp:"Lateral movement often appears as unusual authentication patterns from a compromised host to many internal systems." },
+
+  { q:"15. An endpoint begins beaconing every 60 seconds to a rare domain using HTTPS. This most likely indicates:",
+    opts:[
+      {t:"Command-and-control communications using regular beacons",c:true},
+      {t:"Standard certificate revocation checks by web browsers",c:false},
+      {t:"Normal OS time synchronization with an external service",c:false},
+      {t:"Routine content retrieval from a well-known CDN provider",c:false}],
+    exp:"Periodic, regular connections to rare infrastructure are typical C2 beacon behavior." },
+
+  { q:"16. A user receives an email requesting urgent payment and the sender domain is slightly misspelled. This is most likely:",
+    opts:[
+      {t:"Business email compromise or targeted phishing attempt",c:true},
+      {t:"Routine invoice processing from a vendor mail gateway",c:false},
+      {t:"An automated password expiration reminder from identity",c:false},
+      {t:"A harmless marketing message sent from a mailing list",c:false}],
+    exp:"Lookalike domains and urgency cues are common in phishing/BEC attempts." },
+
+  { q:"17. Which action is MOST appropriate FIRST when malware is suspected on a critical server?",
+    opts:[
+      {t:"Isolate the server to contain impact while preserving data",c:true},
+      {t:"Immediately wipe the system drive to remove the malware",c:false},
+      {t:"Publicly notify customers before initial triage is complete",c:false},
+      {t:"Disable all logging to prevent the attacker from noticing",c:false}],
+    exp:"Containment is typically the first operational step—limit spread while maintaining evidence for analysis." },
+
+  { q:"18. Which indicator most strongly suggests DNS tunneling?",
+    opts:[
+      {t:"Many long and random-looking DNS queries to one domain",c:true},
+      {t:"A normal number of DNS queries to common SaaS services",c:false},
+      {t:"Short DNS queries for internal hostnames during business",c:false},
+      {t:"DNS replies cached locally reducing outbound query volume",c:false}],
+    exp:"DNS tunneling often uses long subdomains, high query volume, and unusual patterns to carry data." },
+
+  { q:"19. A security analyst sees a new local admin account created outside change control. This is most likely evidence of:",
+    opts:[
+      {t:"Privilege escalation or persistence via rogue accounts",c:true},
+      {t:"Routine group policy refresh applying standard accounts",c:false},
+      {t:"A normal endpoint enrollment process for device management",c:false},
+      {t:"Standard password rotation applied by the PAM solution",c:false}],
+    exp:"Unexpected admin account creation is a strong sign of compromise or policy violation." },
+
+  { q:"20. Which response best describes the purpose of an incident response playbook?",
+    opts:[
+      {t:"A step-by-step guide for handling a specific incident type",c:true},
+      {t:"A list of user passwords stored for emergency access use",c:false},
+      {t:"A vendor catalog describing security products and pricing",c:false},
+      {t:"A legal contract defining service uptime requirements only",c:false}],
+    exp:"Playbooks standardize actions and decision points for consistent handling of common incident scenarios." },
+
+  { q:"21. Which log source is MOST useful for detecting abnormal privilege use on Windows systems?",
+    opts:[
+      {t:"Security event logs showing logons and privilege changes",c:true},
+      {t:"Printer spooler logs showing queued and completed jobs",c:false},
+      {t:"Application theme logs showing user display preferences",c:false},
+      {t:"Battery usage logs showing charge and discharge cycles",c:false}],
+    exp:"Windows Security logs (and related auditing) are key for tracking logons, group changes, and privileged actions." },
+
+  { q:"22. Which technique best helps reduce false positives during indicator-based detection?",
+    opts:[
+      {t:"Correlating multiple signals before escalating an alert",c:true},
+      {t:"Alerting on a single IOC match without additional context",c:false},
+      {t:"Disabling endpoint telemetry to prevent noisy detections",c:false},
+      {t:"Blocking all outbound traffic to avoid any beacon traffic",c:false}],
+    exp:"Correlation (SIEM/EDR context) helps confirm suspicious behavior versus one-off matches." },
+
+  { q:"23. A host shows repeated authentication attempts using many usernames against one service. This most likely indicates:",
+    opts:[
+      {t:"Password spraying attempt against a common credential set",c:true},
+      {t:"Normal SSO token refresh activity across multiple users",c:false},
+      {t:"Routine HR onboarding automatically validating accounts",c:false},
+      {t:"Standard VPN reconnection events due to network jitter",c:false}],
+    exp:"Password spraying tries a few common passwords against many accounts to avoid lockouts." },
+
+  { q:"24. Which activity is MOST appropriate during the detection and analysis phase?",
+    opts:[
+      {t:"Confirming the incident, triaging scope, and collecting IOCs",c:true},
+      {t:"Rebuilding all impacted systems without preserving evidence",c:false},
+      {t:"Publishing a public statement before internal validation",c:false},
+      {t:"Removing all logs to prevent further attacker discovery",c:false}],
+    exp:"Detection/analysis validates the event, determines scope/impact, and gathers details for containment/eradication." },
+
+  { q:"25. A file integrity monitoring alert shows critical binaries changed without a patch window. This most likely indicates:",
+    opts:[
+      {t:"Unauthorized modification or tampering with system files",c:true},
+      {t:"Routine update activity completed during planned downtime",c:false},
+      {t:"Standard user personalization settings applied at login",c:false},
+      {t:"Normal backup deduplication rewriting unchanged content",c:false}],
+    exp:"Unexpected changes to critical files can indicate compromise, rootkits, or malicious tampering." },
+
+  { q:"26. Which indicator best aligns with a rootkit infection on a host?",
+    opts:[
+      {t:"Hidden processes or drivers and inconsistent system outputs",c:true},
+      {t:"A single blocked pop-up window from a web browser tab",c:false},
+      {t:"An increase in helpdesk tickets during a password reset day",c:false},
+      {t:"A normal reboot after applying an approved security update",c:false}],
+    exp:"Rootkits often hide processes/drivers and manipulate system calls, causing inconsistent views between tools." },
+
+  { q:"27. Which step helps preserve evidence BEST when collecting data from a suspect disk?",
+    opts:[
+      {t:"Create a forensic image using a write blocker when possible",c:true},
+      {t:"Open the files directly and copy only the suspicious ones",c:false},
+      {t:"Run a cleanup utility to remove temporary files beforehand",c:false},
+      {t:"Defragment the drive to speed up scanning and collection",c:false}],
+    exp:"Forensic imaging with write blockers helps prevent altering evidence and supports repeatable analysis." },
+
+  { q:"28. Which communication is MOST appropriate as part of an incident response communications plan?",
+    opts:[
+      {t:"Defined internal and external notification procedures and roles",c:true},
+      {t:"A list of employee personal accounts for emergency contact use",c:false},
+      {t:"A schedule of marketing campaigns for the next quarter year",c:false},
+      {t:"A catalog of office equipment replacement part identifiers",c:false}],
+    exp:"A communications plan defines who communicates what, to whom, and when (legal/PR/leadership/technical)." },
+
+  { q:"29. A user reports their browser homepage and proxy settings changed without permission. This most likely indicates:",
+    opts:[
+      {t:"Potential browser hijacking or unauthorized configuration change",c:true},
+      {t:"Routine browser updates applying standard security defaults",c:false},
+      {t:"Normal DHCP changes updating gateway and DNS information",c:false},
+      {t:"Approved enterprise management applying user experience settings",c:false}],
+    exp:"Unexpected proxy/homepage changes can indicate adware, browser hijackers, or malicious configuration changes." },
+
+  { q:"30. Which outcome best reflects successful incident containment?",
+    opts:[
+      {t:"Further spread is stopped while evidence and operations are managed",c:true},
+      {t:"All systems are wiped immediately without determining scope first",c:false},
+      {t:"A public press release is issued before internal validation completes",c:false},
+      {t:"Logs are disabled to prevent attackers from noticing investigation steps",c:false}],
+    exp:"Containment aims to stop propagation and limit impact while maintaining the ability to investigate and recover." }
+];
+
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+let shuffledOpts = []; // per-question shuffled options
+
+function shuffle(arr){
+  // Fisher-Yates shuffle
+  for (let i = arr.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function initShuffle(){
+  // Deep copy and shuffle each question's options so correct answer letter changes each load
+  shuffledOpts = quizData.map(q => shuffle(q.opts.map(o => ({...o}))));
+}
+
+function updateTop(){
+  const total = quizData.length;
+  document.getElementById("progressText").textContent = `Question ${Math.min(currentQuestion+1,total)} of ${total}`;
+  document.getElementById("scoreText").textContent = `${score} / ${total}`;
+  const pct = (currentQuestion / total) * 100;
+  document.getElementById("bar").style.width = `${pct}%`;
+}
+
+function disableChoices(){
+  document.querySelectorAll(".choice").forEach(el => {
+    el.classList.add("disabled");
+    el.onclick = null;
+  });
+}
+
+function loadQuestion(){
+  answered = false;
+  document.getElementById("nextBtn").style.display = "none";
+
+  const qObj = quizData[currentQuestion];
+  const opts = shuffledOpts[currentQuestion];
+  const labels = ["A","B","C","D"];
+
+  const quiz = document.getElementById("quiz");
+  quiz.innerHTML = "";
+
+  const qEl = document.createElement("div");
+  qEl.className = "question";
+  qEl.textContent = qObj.q;
+
+  const wrap = document.createElement("div");
+  wrap.className = "choices";
+
+  const feedback = document.createElement("div");
+  feedback.id = "feedback";
+  feedback.className = "feedback";
+
+  opts.forEach((opt, idx) => {
+    const row = document.createElement("div");
+    row.className = "choice";
+    row.setAttribute("role","button");
+    row.setAttribute("tabindex","0");
+
+    row.onclick = () => checkAnswer(idx, row);
+    row.onkeydown = (e) => {
+      if (e.key === "Enter" || e.key === " ") checkAnswer(idx, row);
+    };
+
+    const letter = document.createElement("div");
+    letter.className = "letter";
+    letter.textContent = labels[idx];
+
+    const text = document.createElement("div");
+    text.className = "text";
+    text.textContent = opt.t;
+
+    row.appendChild(letter);
+    row.appendChild(text);
+    wrap.appendChild(row);
+  });
+
+  const details = document.createElement("details");
+  const summary = document.createElement("summary");
+  summary.textContent = "Explanation";
+  const exp = document.createElement("div");
+  exp.className = "explain";
+  exp.textContent = qObj.exp;
+  details.appendChild(summary);
+  details.appendChild(exp);
+
+  quiz.appendChild(qEl);
+  quiz.appendChild(wrap);
+  quiz.appendChild(feedback);
+  quiz.appendChild(details);
+
+  updateTop();
+}
+
+function checkAnswer(selectedIdx, rowEl){
+  if (answered) return;
+  answered = true;
+
+  // mark selected
+  document.querySelectorAll(".choice").forEach(el => el.classList.remove("selected"));
+  if (rowEl) rowEl.classList.add("selected");
+
+  const opts = shuffledOpts[currentQuestion];
+  const isCorrect = opts[selectedIdx].c === true;
+
+  const feedback = document.getElementById("feedback");
+  if (isCorrect){
+    feedback.innerHTML = `<span class="correct">Correct!</span>`;
+    score++;
+  } else {
+    feedback.innerHTML = `<span class="incorrect">Incorrect.</span>`;
+  }
+
+  disableChoices();
+  document.getElementById("nextBtn").style.display = "inline-block";
+  updateTop();
+}
+
+function nextQuestion(){
+  currentQuestion++;
+  const total = quizData.length;
+
+  if (currentQuestion < total){
+    loadQuestion();
+  } else {
+    // complete
+    const quiz = document.getElementById("quiz");
+    quiz.innerHTML = `
+      <h2 style="margin:0 0 6px 0;color:var(--accent);">Exam Complete</h2>
+      <p style="margin:0;color:var(--text);font-weight:800;">Final Score: ${score} / ${total}</p>
+      <p style="margin:8px 0 0 0;color:var(--muted);">Click Restart to reshuffle answers and retake the exam.</p>
+    `;
+    document.getElementById("nextBtn").style.display = "none";
+    document.getElementById("bar").style.width = "100%";
+    document.getElementById("progressText").textContent = `Completed • ${total} questions`;
+    document.getElementById("scoreText").textContent = `${score} / ${total}`;
+  }
+}
+
+function restartQuiz(){
+  currentQuestion = 0;
+  score = 0;
+  initShuffle();      // reshuffle options again (new A/B/C/D positions)
+  loadQuestion();
+}
+
+initShuffle(); // shuffle on every page load
+loadQuestion();
+</script>
+</body>
+</html>
