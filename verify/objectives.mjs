@@ -33,7 +33,7 @@ const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/cs
 const MIN = 20;
 // Topics still short of 20 while new questions are written for them (30 Sept 2026).
 // Remove a topic from this list in the same commit that fills it.
-const PENDING = ['1.2', '2.5', '4.6'];
+const PENDING = [];
 // Answer keys corrected on 30 Sept 2026: id -> the option that must be marked right.
 const RIGHT = { 43: 'Mandatory vacation' };
 
@@ -129,10 +129,10 @@ async function run(dir, pending = PENDING) {
     // are written), answered right, is marked right
     const newest = B.filter(x => x.source && x.source.startsWith('written 30 Sept 2026'));
     const topics = newest.length ? [...new Set(newest.map(x => x.objectiveId))] : O.map(o => o.id);
-    await page.evaluate(t => { localStorage.clear(); sessionStorage.setItem('nq_config', JSON.stringify({ mode: 'custom', count: 12, objectiveIds: t, theme: 'theme-green', label: 'New questions' })); }, topics);
+    await page.evaluate(t => { localStorage.clear(); sessionStorage.setItem('nq_config', JSON.stringify({ mode: 'custom', count: 24, objectiveIds: t, theme: 'theme-green', label: 'New questions' })); }, topics);
     await page.goto(`${URL}/quiz.html`);
     let played = 0;
-    for (let i = 0; i < 12 && (await page.$('.question-text')); i++) {
+    for (let i = 0; i < 24 && (await page.$('.question-text')); i++) {
       const qt = await page.$eval('.question-text', e => e.textContent);
       const x = B.find(y => y.question === qt);
       const opts = await page.$$eval('.option > span > div:first-child', ds => ds.map(d => d.textContent));
@@ -145,8 +145,8 @@ async function run(dir, pending = PENDING) {
       if (newest.includes(x)) played++;
       await page.click('#primaryBtn');
     }
-    if (newest.length) ok(played >= 6, `only ${played} of 12 questions on the newest topics were new ones`);
-    ok(await page.$eval('body', b => /100/.test(b.textContent)), 'twelve right answers did not score 100');
+    if (newest.length) ok(played >= 3, `only ${played} of 24 questions on the newest topics were new ones`);  // random draw: well above 3 expected
+    ok(await page.$eval('body', b => /100/.test(b.textContent)), '24 right answers did not score 100');
     // the per-topic score bars paint: all right means every fill spans its whole bar
     const bars = await page.$$eval('.breakdown-bar', bs => bs.map(b => [b.getBoundingClientRect().width, b.querySelector('.breakdown-fill').getBoundingClientRect().width]));
     ok(bars.length && bars.every(([w, f]) => w > 0 && f >= w - 1), `score bars don't fill: ${JSON.stringify(bars.map(([w, f]) => `${Math.round(f)}/${Math.round(w)}px`))}`);

@@ -48,6 +48,12 @@ Both are single-line JSON. Question ids are integers. GitHub Pages serves
   five extra scenarios).
   - Topics still short are listed in `PENDING` in `verify/objectives.mjs`.
   - Take a topic off that list in the same commit that fills it.
+  - 30 Sept 2026: 41 new questions, ids 774–814:
+    - 1.2 Change management +11
+    - 2.5 AI risks +24
+    - 4.6 Automation +6
+  - Every topic now has at least 20 questions (814 in all), and `PENDING` is
+    empty.
 - **Question format** for new questions:
   - four options, with `correctIndex` varied
   - a "why" for every option, and an `explanation` equal to the correct

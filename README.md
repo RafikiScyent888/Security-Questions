@@ -16,8 +16,8 @@ numbers, so these numbers are this site's, not CompTIA's. A verbatim copy of
 the list is in `verify/objectives-secplus-2026-09-30.md`.
 
 Every question was read and filed under the topic it actually tests
-(30 September 2026). The goal is at least 20 questions per topic; topics
-still short are being filled.
+(30 September 2026). Every topic has at least 20 questions; each topic that was short was topped up
+to 25.
 
 ## What's here
 
@@ -29,7 +29,7 @@ still short are being filled.
   per-topic breakdown, review of missed questions with explanations for both
   the correct and incorrect answers, and "Retake the ones I missed").
 - `assets/questions.js` — the topic list (`window.OBJECTIVES`) and the
-  question bank (`window.QUESTION_BANK`, 773 questions). Edit it directly.
+  question bank (`window.QUESTION_BANK`, 814 questions). Edit it directly.
 - `assets/common.js`, `assets/quiz.js`, `assets/style.css` — app logic and
   styling.
 - The original standalone quiz files (`Sec + Day *.html`, `Overall *.html`,
