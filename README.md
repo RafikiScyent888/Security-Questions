@@ -34,3 +34,11 @@ blueprint.
   banner appears on the dashboard next time you visit.
 - Every answer choice, right or wrong, shows an explanation.
 - Score is always shown out of 100, regardless of quiz length.
+- After any quiz, retake just the questions you missed or skipped, round
+  after round, until every one is right.
+
+## Checks: `verify/` (need Playwright; not needed to run the site)
+
+- `node verify/retake.mjs` drives "Retake the ones I missed" end to end,
+  including a 45-question custom quiz. `--plant` runs 7 plants, each one a
+  planted bug the check must catch.
