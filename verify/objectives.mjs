@@ -103,7 +103,7 @@ async function run(dir, pending = PENDING) {
     // the page lists every topic that has questions, with its true count, under its domain
     const shown = await page.$$eval('.domain-group', gs => gs.flatMap(g => [...g.querySelectorAll('.objective-row')].map(r => ({
       domain: g.querySelector('h3').textContent.trim(), id: r.dataset.obj,
-      text: r.querySelector('span').textContent.replace(/\s+/g, ' ').trim(), n: r.querySelector('.obj-count').textContent.trim() }))));
+      text: r.querySelector('span:not(.dot)').textContent.replace(/\s+/g, ' ').trim(), n: r.querySelector('.obj-count').textContent.trim() }))));
     const listed = O.filter(o => count[o.id]);
     ok(shown.length === listed.length, `the custom quiz lists ${shown.length} topics, ${listed.length} have questions`);
     for (const s of shown) {
@@ -117,7 +117,7 @@ async function run(dir, pending = PENDING) {
     await page.check('.objective-row[data-obj="4.1"] input');
     await page.click('#startBtn');
     await page.waitForURL(/quiz\.html/);
-    const cfg = await page.evaluate(() => JSON.parse(sessionStorage.getItem('nq_config')));
+    const cfg = await page.evaluate(() => JSON.parse(sessionStorage.getItem('sq_config')));
     ok(JSON.stringify(cfg.objectiveIds) === '["4.1"]', `a 4.1-only quiz was configured with ${JSON.stringify(cfg.objectiveIds)}`);
     const tag = await page.$eval('.objective-tag', e => e.textContent.replace(/\s+/g, ' ').trim());
     ok(tag === `4.1 · ${topic['4.1'].label}`, `the question header reads "${tag}"`);
@@ -129,7 +129,7 @@ async function run(dir, pending = PENDING) {
     // are written), answered right, is marked right
     const newest = B.filter(x => x.source && x.source.startsWith('written 30 Sept 2026'));
     const topics = newest.length ? [...new Set(newest.map(x => x.objectiveId))] : O.map(o => o.id);
-    await page.evaluate(t => { localStorage.clear(); sessionStorage.setItem('nq_config', JSON.stringify({ mode: 'custom', count: 24, objectiveIds: t, theme: 'theme-green', label: 'New questions' })); }, topics);
+    await page.evaluate(t => { localStorage.clear(); sessionStorage.setItem('sq_config', JSON.stringify({ mode: 'custom', count: 24, objectiveIds: t, theme: 'theme-green', label: 'New questions' })); }, topics);
     await page.goto(`${URL}/quiz.html`);
     let played = 0;
     for (let i = 0; i < 24 && (await page.$('.question-text')); i++) {
@@ -148,7 +148,7 @@ async function run(dir, pending = PENDING) {
     if (newest.length) ok(played >= 3, `only ${played} of 24 questions on the newest topics were new ones`);  // random draw: well above 3 expected
     ok(await page.$eval('body', b => /100/.test(b.textContent)), '24 right answers did not score 100');
     // the per-topic score bars paint: all right means every fill spans its whole bar
-    const bars = await page.$$eval('.breakdown-bar', bs => bs.map(b => [b.getBoundingClientRect().width, b.querySelector('.breakdown-fill').getBoundingClientRect().width]));
+    const bars = await page.$$eval('.sc-bar', bs => bs.map(b => [b.getBoundingClientRect().width, b.querySelector('.sc-fill').getBoundingClientRect().width]));  // the score card's bars, since 31 October 2026
     ok(bars.length && bars.every(([w, f]) => w > 0 && f >= w - 1), `score bars don't fill: ${JSON.stringify(bars.map(([w, f]) => `${Math.round(f)}/${Math.round(w)}px`))}`);
   } catch (e) { fails.push('could not drive the page — ' + String(e.message).split('\n')[0]); }
   ok(!errors.length, 'script errors: ' + errors.join(' | '));
@@ -180,7 +180,7 @@ if (process.argv.includes('--plant')) {
     'duplicate question text': data((O, B) => { B[5].question = B[4].question; }),
     'page miscounts': { custom: custom.replace('countsByObjective[q.objectiveId] = (countsByObjective[q.objectiveId] || 0) + 1;', 'if (q.id !== 1) countsByObjective[q.objectiveId] = (countsByObjective[q.objectiveId] || 0) + 1;') },
     'page hides a topic': { custom: custom.replace('(o) => countsByObjective[o.id] > 0)', '(o) => countsByObjective[o.id] > 0 && o.id !== "3.4")') },
-    'score bars left unpainted': { css: '.breakdown-fill { display: block; height|.breakdown-fill { height' },
+    'score bars left unpainted': { css: '.sc-fill { display: block; height|.sc-fill { height' },
     'one-topic quiz ignores the choice': { custom: custom.replace('const objectiveIds = selectedObjectiveIds();', 'const objectiveIds = window.OBJECTIVES.map((o) => o.id);') },
   };
   let missed = 0;

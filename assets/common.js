@@ -1,9 +1,26 @@
 // Shared helpers used by index.html, custom.html, and quiz.html.
 (function () {
+  // Security+ has its own keys (31 October 2026). It used to share "nq_..."
+  // with Network+, and both sites live at rafikiscyent888.github.io, so a quiz
+  // paused on one showed up on the other.
   const STORAGE = {
-    config: "nq_config",       // sessionStorage: {mode, count, objectiveIds, theme, label}
-    paused: "nq_paused_state", // localStorage: full in-progress quiz snapshot
+    config: "sq_config",       // sessionStorage: {mode, count, objectiveIds, theme, label}
+    paused: "sq_paused_state", // localStorage: full in-progress quiz snapshot
   };
+  // A Security+ quiz paused before the change sits under the old shared key:
+  // move it here, but only if every question in it is one of this bank's.
+  (function movePausedQuiz() {
+    try {
+      const raw = localStorage.getItem("nq_paused_state");
+      if (!raw || localStorage.getItem(STORAGE.paused)) return;
+      const s = JSON.parse(raw);
+      const mine = new Map(window.QUESTION_BANK.map((q) => [q.id, q.question]));
+      if (s && Array.isArray(s.questions) && s.questions.length && s.questions.every((q) => mine.get(q.id) === q.question)) {
+        localStorage.setItem(STORAGE.paused, raw);
+        localStorage.removeItem("nq_paused_state");
+      }
+    } catch (e) { /* unreadable: leave it */ }
+  })();
 
   function shuffle(arr) {
     const a = arr.slice();
@@ -30,13 +47,21 @@
     });
   }
 
-  // Builds a randomized quiz: picks `count` questions from the pool (filtered
-  // by objectiveIds), then shuffles each question's answer order too.
-  function buildQuizQuestions(pool, count) {
-    const picked = shuffle(pool).slice(0, count);
+  // Builds a quiz: picks `count` questions at random from the pool (or the
+  // first `count` when `prepicked`). With Shuffle order on (`mix`, the
+  // default) the questions come in a random order and each question's answers
+  // are shuffled too; off, they come in the bank's order with the answers as
+  // written. `order` keeps each answer's place in the bank's question.
+  function buildQuizQuestions(pool, count, mix = true, prepicked = false) {
+    let picked = prepicked ? pool.slice(0, count) : shuffle(pool).slice(0, count);
+    if (mix && prepicked) picked = shuffle(picked);
+    if (!mix) {
+      const pos = new Map(window.QUESTION_BANK.map((q, i) => [q.id, i]));
+      picked = picked.slice().sort((a, b) => pos.get(a.id) - pos.get(b.id));
+    }
     return picked.map((q) => {
       const optionExplanations = optionExplanationsFor(q);
-      const order = shuffle(q.options.map((_, i) => i));
+      const order = mix ? shuffle(q.options.map((_, i) => i)) : q.options.map((_, i) => i);
       return {
         id: q.id,
         question: q.question,
@@ -46,6 +71,7 @@
         options: order.map((i) => q.options[i]),
         optionExplanations: order.map((i) => optionExplanations[i]),
         correctIndex: order.indexOf(q.correctIndex),
+        order,
       };
     });
   }

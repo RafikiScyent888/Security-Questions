@@ -62,6 +62,33 @@ Both are single-line JSON. Question ids are integers. GitHub Pages serves
   - wrong options are near misses
   - a `source` note beginning "written 30 Sept 2026 for doc topic"
 
+## Score card, question map and filters (31 October 2026, preview)
+
+Built to the owner's decisions in the doc "Test banks: score card, question
+map and filters (plan)" (https://claude.ai/artifact/6vcGwyvSsrwfHBWaKp6rq5):
+the features the owner approved on Core 1, Core 2 and Network+, taken from
+Network+ (the same engine). It is on the branch
+`claude/student-resources-knowledge-base-vgvfni` and waits for the owner's
+approval before it goes to `main`.
+- **`assets/testbank.js`** holds it all (colours, Missed list, Shuffle order,
+  Easier reading, the confirm dialog, score card, "Study these first", parts
+  bar, chips, map). `quiz.js` and `style.css` are Network+'s.
+- **Topic colours:** `TOPIC_COLOR`, 26 deep shades around the rainbow in topic
+  order, white lettering over 7:1 on each; a colour always goes with its
+  topic's number. Parts don't brighten on hover.
+- **"New for the updated objectives"** is the 41 questions whose `source`
+  begins "written 30 Sept 2026" (774-814).
+- **Its own keys (a fix):** Security+ used to save under Network+'s keys
+  (`nq_config`, `nq_paused_state`), and both sites live at
+  rafikiscyent888.github.io, so a paused quiz showed on the other site. It now
+  uses `sq_config` and `sq_paused_state`; on load, a quiz paused under the old
+  key moves over if every question in it is this bank's. Network+ ignores a
+  paused quiz that isn't its own (live 31 October). The new keys are
+  `sq_missed_v1` and `sq_shuffle_v1`; Easier reading is `cwp-easier-reading`,
+  shared with the other test banks.
+- **CertMaster Learn:** `CERTMASTER_URL` is CompTIA's sign-in page until the
+  owner confirms the address students use.
+
 ## Checks: `verify/` (need Playwright; not needed to run the site)
 
 - `node verify/objectives.mjs`
@@ -70,6 +97,10 @@ Both are single-line JSON. Question ids are integers. GitHub Pages serves
     43's key stays fixed.
   - Drives `custom.html` and a quiz, including the results screen's score bars.
   - `--plant` runs 19 plants.
+- `node verify/scorecard.mjs`
+  - Drives the score card, map, chips, parts bar, Missed list, Reset, the
+    prompts, Shuffle order, review, Easier reading and the key move.
+  - `--plant` runs 24 plants (`--only=<name>` runs one).
 - `node verify/retake.mjs`
   - Drives "Retake the ones I missed".
   - `--plant` runs 7 plants.
@@ -83,7 +114,9 @@ the before/after preview: "I like all of the changes in all of the quizzes".
 - Disabled buttons are no longer faded out. They're solid silver with a dashed
   border and readable text.
 - `node verify/contrast.mjs` drives every screen (dashboard, setup, question
-  before and after answering, results, paused-quiz banner) and fails on
+  before and after answering, results, paused-quiz banner; since 31 October
+  also a chip and a part chosen, every part hovered, the confirm dialog,
+  Easier reading on every page, and a phone) and fails on
   anything under 7:1 (4.5:1 for large text). `--plant` puts back the old
   sky-blue buttons and must fail.
 
