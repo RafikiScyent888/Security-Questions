@@ -94,6 +94,40 @@ same day. Still open: the CertMaster Learn address students use.
 - **CertMaster Learn:** `CERTMASTER_URL` is CompTIA's sign-in page until the
   owner confirms the address students use.
 
+## Light or dark (31 October 2026)
+
+The owner asked for a dark/light switch on every test bank ("we need to keep
+things easy for my students to read"). Core 1 was previewed first; the owner
+approved it and said of the other four: "Push it and do the rest". The same
+change as Network+ (same engine); decided by the owner before building:
+- **One choice for the whole program:** the key is `cwp:theme` ("light" or
+  "dark"), the same key the acronym sites use. Nothing is saved until the
+  student presses the button.
+- **Until the student chooses, the page follows the device**, live; once
+  chosen, the choice wins over the device. (Only Core 1 starts dark.)
+
+How it works:
+- Each page's head stamps `data-theme` on `<html>` before it paints.
+- `#themeBtn` beside Easier reading, wired by `TB.initTheme()`. It names where
+  it goes ("Dark mode" on the light page), with a moon or sun.
+- **Dark mode** is the block at the end of `assets/style.css` (identical to
+  Network+'s), every rule under `:root[data-theme="dark"]`: the program's dark
+  look, as on Core 1.
+- **Topic colours in dark mode:** `TB.TOPIC_BRIGHT`, a bright shade of each
+  of the 26 hues, dark lettering over 7:1, neighbours alternating in
+  lightness. `tc(id)` carries both (`--tc`, `--tcb`).
+- Three hard-coded greys (`color:#475569`) now use `var(--muted)`.
+
+## AAA on gradients (fixed 31 October 2026)
+
+The contrast check only took a background colour that covered 8% of a text's
+box, so on a gradient it found none and passed the text unmeasured. Fixed in
+`verify/contrast.mjs`. It found the tiles' bright glow spots behind their
+lettering (white on the green glow 1.6:1) and the orange, green and yellow
+ends too light, as on Network+. The glows are gone, each tile keeps its hue,
+deeper; the small counts and the quiz bar's pills sit on a darker backing.
+Over 7:1 (4.5:1 for the large titles), both modes.
+
 ## Checks: `verify/` (need Playwright; not needed to run the site)
 
 - `node verify/objectives.mjs`
@@ -105,8 +139,14 @@ same day. Still open: the CertMaster Learn address students use.
   - `--plant` runs 20 plants.
 - `node verify/scorecard.mjs`
   - Drives the score card, map, chips, parts bar, Missed list, Reset, the
-    prompts, Shuffle order, review, Easier reading and the key move.
-  - `--plant` runs 24 plants (`--only=<name>` runs one).
+    prompts, Shuffle order, review, Easier reading, the key move and light or
+    dark (the device followed, live, until chosen; nothing saved until then;
+    the button's words; `cwp:theme` on every page; a choice from another site;
+    the choice beats the device; the bright shades).
+  - `--plant` runs 34 plants (`--only=<name>` runs one).
+  - Fixed 31 Oct: the "finish with questions left" step could land, after a
+    reshuffle, on the question already answered (about one run in ten); it
+    now answers it only if still open. A failed drive reports its lines.
 - `node verify/retake.mjs`
   - Drives "Retake the ones I missed".
   - `--plant` runs 7 plants.
@@ -125,6 +165,11 @@ the before/after preview: "I like all of the changes in all of the quizzes".
   Easier reading on every page, and a phone) and fails on
   anything under 7:1 (4.5:1 for large text). `--plant` puts back the old
   sky-blue buttons and must fail.
+- Since 31 October it drives every screen twice, dark then light, each in a
+  fresh browser, fails if a sweep finds the page in the other theme, and
+  measures text on gradients (above). `--theme=dark` runs one. Calibrated
+  with plants: faint dark-only text, a glow tile put back, the theme setting
+  ignored; all caught.
 
 Run it after any colour or layout change.
 

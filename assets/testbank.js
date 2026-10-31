@@ -27,6 +27,18 @@
     "5.1": "#34549a", "5.2": "#31357d", "5.3": "#584a96", "5.4": "#4c2b73", "5.5": "#704086", "5.6": "#5f2360",
   };
 
+  // The same hues, bright, for the dark page (31 October 2026): dark lettering on
+  // every one is over 7:1, and neighbours alternate in lightness so they stay apart.
+  const TOPIC_BRIGHT = {
+    "1.1": "#ea8898", "1.2": "#ffb2ae", "1.3": "#e98c73",
+    "2.1": "#ffb48d", "2.2": "#de9354", "2.3": "#f7ba6a", "2.4": "#c79f41", "2.5": "#dac665",
+    "3.1": "#a6aa49", "3.2": "#b3d077", "3.3": "#7cb266", "3.4": "#86d796",
+    "4.1": "#4db789", "4.2": "#5bdabe", "4.3": "#14b7ad", "4.4": "#48d8df", "4.5": "#1eb4cf", "4.6": "#5fd3fe", "4.7": "#52ade6", "4.8": "#9ac9fe",
+    "5.1": "#7fa4f1", "5.2": "#b7c2ff", "5.3": "#a59aed", "5.4": "#d4b9ff", "5.5": "#c491dd", "5.6": "#f4aef3",
+  };
+  // Light or dark: one choice for the whole program, shared with the acronym sites.
+  const THEME_KEY = "cwp:theme";
+
   const OBJ = window.OBJECTIVES;
   const ALL = OBJ.map((o) => o.id);
   const LABEL = {};
@@ -39,7 +51,7 @@
   const question = (id) => BY_ID.get(String(id));
   const isNew = (q) => typeof q.source === "string" && q.source.indexOf(NEW_SOURCE) === 0;
   const topicText = (id) => `${id} ${esc(LABEL[id] || "")}`;
-  const tc = (id) => `--tc:${TOPIC_COLOR[id] || "#334155"}`;
+  const tc = (id) => `--tc:${TOPIC_COLOR[id] || "#334155"};--tcb:${TOPIC_BRIGHT[id] || "#cbd5e1"}`;
   const dot = (id) => `<span class="dot" style="${tc(id)}" aria-hidden="true"></span>`;
 
   // ---------- settings that last ----------
@@ -130,6 +142,35 @@
       d.showModal();
       no.focus();
     });
+  }
+
+  // ---------- Light or dark: the student's choice, kept for the whole program ----------
+  // Nothing is saved until the button is pressed; until then the page follows the
+  // device, even if its setting changes while the page is open. The button names
+  // where it goes ("Dark mode" on the light page), as on the acronym sites.
+  const SUN = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1"/></svg>';
+  const MOON = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg>';
+  function initTheme() {
+    const b = document.getElementById("themeBtn"), root = document.documentElement;
+    if (!b) return;
+    const now = () => (root.getAttribute("data-theme") === "dark" ? "dark" : "light");
+    const chosen = () => { try { const v = localStorage.getItem(THEME_KEY); return v === "light" || v === "dark" ? v : null; } catch (e) { return null; } };
+    const paint = () => {
+      const next = now() === "dark" ? "light" : "dark";
+      b.innerHTML = (next === "light" ? SUN : MOON) + "<span>" + (next === "light" ? "Light mode" : "Dark mode") + "</span>";
+      const say = "Switch to " + next + " mode. Currently " + now() + " mode.";
+      b.setAttribute("aria-label", say); b.title = say;
+    };
+    b.addEventListener("click", () => {
+      const next = now() === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem(THEME_KEY, next); } catch (e) { /* storage off */ }
+      paint();
+    });
+    const mq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+    const follow = (e) => { if (chosen()) return; root.setAttribute("data-theme", e.matches ? "dark" : "light"); paint(); };
+    if (mq) { if (mq.addEventListener) mq.addEventListener("change", follow); else if (mq.addListener) mq.addListener(follow); }
+    paint();
   }
 
   // ---------- Easier reading: on stays on, across pages, visits and test banks ----------
@@ -275,11 +316,11 @@
   }
 
   window.TB = {
-    KEYS, TOPIC_COLOR, NEW_CHIP, CERTMASTER_URL, ALL, LABEL,
+    KEYS, TOPIC_COLOR, TOPIC_BRIGHT, NEW_CHIP, CERTMASTER_URL, ALL, LABEL,
     question, isNew, topicText, tc, dot,
     shuffleOn, setShuffle, shuffleBox, wireShuffle,
     loadMissed, recordAnswer, missedList, studyTopics, topicPick,
-    startMissedAll, startTopic, askConfirm, ensureDialog, initEasier,
+    startMissedAll, startTopic, askConfirm, ensureDialog, initEasier, initTheme,
     topicsIn, scorePanel, studyPanel, panelButtons, wirePanel, renderMissedCard,
     partsHtml, fitParts, chipsHtml, mapHtml, visibleIn,
   };
