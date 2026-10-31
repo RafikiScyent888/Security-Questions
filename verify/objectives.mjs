@@ -8,7 +8,8 @@
 //     (still being written); a PENDING topic that has reached 20 fails too, so
 //     the list is emptied as each batch lands
 //   - every question is well formed: 4 options, a correct answer, an
-//     explanation, and a "why" for every option; ids and question texts unique
+//     explanation, and a "why" for every option; ids and question texts unique;
+//     no literal ** formatting marks
 //   - no wrong option carries the question's explanation (a sign the key or the
 //     whys are misaligned), and the key fixed on 30 Sept (question 43) stays fixed
 //   - the custom quiz page lists every topic that has questions, with its true
@@ -73,6 +74,8 @@ async function run(dir, pending = PENDING) {
     q.optionExplanations && q.optionExplanations.forEach((w, i) => { if (i !== q.correctIndex) ok(w.trim() !== String(q.explanation).trim(), `${q.id}: option ${i} carries the explanation, so the key or the whys are misaligned`); });
     if (RIGHT[q.id]) ok(q.options[q.correctIndex] === RIGHT[q.id], `${q.id}: answer key marks "${q.options[q.correctIndex]}", should be "${RIGHT[q.id]}"`);
     ok(!texts.has(q.question), `${q.id}: question text repeats another question word for word`); texts.add(q.question);
+    // formatting marks show as literal asterisks on the page (36 were stripped 31 Oct 2026)
+    ok(![q.question, ...q.options, q.explanation, ...(q.optionExplanations || [])].some(t => typeof t === 'string' && t.includes('**')), `${q.id}: shows literal ** formatting marks`);
     const t = topic[q.objectiveId];
     ok(t, `${q.id} is filed under "${q.objectiveId}", which isn't a topic`);
     if (t) ok(q.domain === t.domain && q.objective === t.label, `${q.id} says "${q.domain}" / "${q.objective}" but topic ${t.id} is "${t.domain}" / "${t.label}"`);
@@ -178,6 +181,7 @@ if (process.argv.includes('--plant')) {
     'explanation copied onto a wrong option': data((O, B) => { const q = B[200]; q.optionExplanations[(q.correctIndex + 1) % 4] = q.explanation; }),
     'answers shuffled, key not moved': { common: 'correctIndex: order.indexOf(q.correctIndex),|correctIndex: q.correctIndex,' },
     'duplicate question text': data((O, B) => { B[5].question = B[4].question; }),
+    'formatting marks put back': data((O, B) => { const q = B.find(q => q.id === 427); q.question = q.question.replace('BIA', '**BIA**'); }),
     'page miscounts': { custom: custom.replace('countsByObjective[q.objectiveId] = (countsByObjective[q.objectiveId] || 0) + 1;', 'if (q.id !== 1) countsByObjective[q.objectiveId] = (countsByObjective[q.objectiveId] || 0) + 1;') },
     'page hides a topic': { custom: custom.replace('(o) => countsByObjective[o.id] > 0)', '(o) => countsByObjective[o.id] > 0 && o.id !== "3.4")') },
     'score bars left unpainted': { css: '.sc-fill { display: block; height|.sc-fill { height' },

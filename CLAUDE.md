@@ -40,6 +40,10 @@ Both are single-line JSON. Question ids are integers. GitHub Pages serves
     - How the attack arrives went to 2.2 Threat vectors.
     - Recognizing an attack in progress went to 2.3 Indicators.
     - Kinds of weakness went to 2.4 Vulnerabilities.
+- **Fixed 31 Oct 2026:** 36 questions (427-462) showed formatting marks as
+  literal asterisks around an acronym ("What does **BIA** stand for..."). The
+  owner: "fix the asterisks". The marks are gone; the words are unchanged, and
+  `verify/objectives.mjs` fails on any `**` in a question, option or why.
 - **Fixed:** question 43 asked about mandatory vacations but was keyed "Job
   rotation", and no mandatory-vacation option existed. It now offers
   "Mandatory vacation" (correct), with "Job rotation", "Separation of duties"
@@ -97,7 +101,8 @@ same day. Still open: the CertMaster Learn address students use.
   - Checks that answer keys agree with their explanations, and that question
     43's key stays fixed.
   - Drives `custom.html` and a quiz, including the results screen's score bars.
-  - `--plant` runs 19 plants.
+  - Fails on literal `**` formatting marks.
+  - `--plant` runs 20 plants.
 - `node verify/scorecard.mjs`
   - Drives the score card, map, chips, parts bar, Missed list, Reset, the
     prompts, Shuffle order, review, Easier reading and the key move.
