@@ -62,14 +62,15 @@ Both are single-line JSON. Question ids are integers. GitHub Pages serves
   - wrong options are near misses
   - a `source` note beginning "written 30 Sept 2026 for doc topic"
 
-## Score card, question map and filters (31 October 2026, preview)
+## Score card, question map and filters (31 October 2026)
 
 Built to the owner's decisions in the doc "Test banks: score card, question
 map and filters (plan)" (https://claude.ai/artifact/6vcGwyvSsrwfHBWaKp6rq5):
 the features the owner approved on Core 1, Core 2 and Network+, taken from
-Network+ (the same engine). It is on the branch
-`claude/student-resources-knowledge-base-vgvfni` and waits for the owner's
-approval before it goes to `main`.
+Network+ (the same engine). The owner saw the preview (the 26 colours, a
+quiz, the filters, Reset, results, the dashboard, the Full Custom Quiz page,
+Easier reading, a phone) and approved it: "Yes push it". Live on `main` the
+same day. Still open: the CertMaster Learn address students use.
 - **`assets/testbank.js`** holds it all (colours, Missed list, Shuffle order,
   Easier reading, the confirm dialog, score card, "Study these first", parts
   bar, chips, map). `quiz.js` and `style.css` are Network+'s.
