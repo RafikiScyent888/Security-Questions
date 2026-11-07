@@ -74,7 +74,8 @@ the features the owner approved on Core 1, Core 2 and Network+, taken from
 Network+ (the same engine). The owner saw the preview (the 26 colours, a
 quiz, the filters, Reset, results, the dashboard, the Full Custom Quiz page,
 Easier reading, a phone) and approved it: "Yes push it". Live on `main` the
-same day. Still open: the CertMaster Learn address students use.
+same day. (The CertMaster Learn address, the one thing left open, was settled
+7 November 2026.)
 - **`assets/testbank.js`** holds it all (colours, Missed list, Shuffle order,
   Easier reading, the confirm dialog, score card, "Study these first", parts
   bar, chips, map). `quiz.js` and `style.css` are Network+'s.
@@ -91,8 +92,14 @@ same day. Still open: the CertMaster Learn address students use.
   paused quiz that isn't its own (live 31 October). The new keys are
   `sq_missed_v1` and `sq_shuffle_v1`; Easier reading is `cwp-easier-reading`,
   shared with the other test banks.
-- **CertMaster Learn:** `CERTMASTER_URL` is CompTIA's sign-in page until the
-  owner confirms the address students use.
+- **CertMaster Learn:** `CERTMASTER_URL` is the address the owner gave on 7 November 2026,
+  https://www.comptia.org/en-us/resources/certmaster-training/learn/ (the owner: "needs to be the
+  hyperlink for Review in CertMaster Learn across all of the quizzes"). It replaced CompTIA's sign-in
+  page; `verify/scorecard.mjs` checks the link is exactly this address.
+- **"Practice this topic" (7 November 2026):** the owner: "Please fix the to 'Practice this topic' across
+  all of the quizzes." The link, the topic quiz's banner ("Practicing ...") and its title use the American
+  spelling; `verify/scorecard.mjs` checks the link's words and that no "Practis" is left on the page. The
+  internal attribute `data-practise` keeps its name: students never see it.
 
 ## Light or dark (31 October 2026)
 
